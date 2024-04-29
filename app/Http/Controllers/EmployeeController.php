@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Route;
 
-abstract class Controller
+abstract class EmployeeController extends Controller
 {
     //
 }
