@@ -6,36 +6,32 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * Class Briefing
+ * Class Test
  * @package App\Models
  *
- * @property string $ID_Инструктаж
+ * @property string $ID_Теста
+ * @property string $Категория
  * @property string $Тема
- * @property string $Материал
+ * @property string $СсылкаНаТест
  *
  * @property Task[]|Collection $tasks
  */
-class Briefing extends Model
+class Test extends Model
 {
     use HasFactory;
     use HasUuids;
 
-    public $table = 'Инструктаж';
+    public $table = 'Тест';
     public $timestamps = false;
-    protected $primaryKey = 'ID_Инструктаж';
+    protected $primaryKey ='ID_Теста';
     protected $keyType = 'string';
-
-    public function mentor(): BelongsTo
-    {
-        return $this->belongsTo(Mentor::class, 'ID_Наставника', 'ID_Наставника');
-    }
 
     public function tasks(): HasMany
     {
         return $this->HasMany(Task::class);
     }
 }
+
