@@ -13,10 +13,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * Class Material
  * @package App\Models
  *
- * @property string $ID_Статьи
- * @property string $Категория
- * @property string $Тема
- * @property string $ID_Наставника
+ * @property string $subject
+ * @property string $category
+ * @property string $text
  *
  * @property Mentor $mentor
  * @property Task[]|Collection $tasks
@@ -26,14 +25,15 @@ class Material extends Model
     use HasFactory;
     use HasUuids;
 
-    public $table = 'Материалы';
-    public $timestamps = false;
-    protected $primaryKey = 'ID_Статьи';
-    protected $keyType = 'string';
+    protected $guarded = [
+        'uuid',
+        'created_at',
+        'updated_at',
+    ];
 
     public function mentor(): BelongsTo
     {
-        return $this->belongsTo(Mentor::class, 'ID_Наставника', 'ID_Наставника');
+        return $this->belongsTo(Mentor::class, 'mentor_uuid', 'uuid');
     }
 
     public function tasks(): HasMany

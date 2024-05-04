@@ -12,18 +12,17 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * Class Mentor
  * @package App\Models
  *
- * @property string ID_Наставника
- * @property string $Фамилия
- * @property string $Имя
- * @property string $Отчество
- * @property string $Телефон
- * @property string $Почта
- * @property string $Роль
- * @property string $Должность
- * @property string $Отдел
- * @property string $Образования
- * @property string $ДопОбразование
- * @property string $ОпытРаботы
+ * @property string $last_name
+ * @property string $first_name
+ * @property string $patronymic
+ * @property string $phone
+ * @property string $email
+ * @property string $role
+ * @property string $position
+ * @property string $department
+ * @property string $education
+ * @property string $add_education
+ * @property int $experience
  *
  * @property Material[]|Collection $materials
  * @property Employee[]|Collection $employees
@@ -33,10 +32,17 @@ class Mentor extends Model
     use HasFactory;
     use HasUuids;
 
-    public $table = 'Наставники';
-    public $timestamps = false;
-    protected $primaryKey ='ID_Наставника';
-    protected $keyType = 'string';
+    public const ROLES = [
+        'Сотрудник',
+        'Наставник',
+        'Администратор',
+    ];
+
+    protected $guarded = [
+        'uuid',
+        'created_at',
+        'updated_at',
+    ];
 
     public function materials(): HasMany
     {

@@ -22,17 +22,17 @@ return new class extends Migration {
                 'Отклонена',
                 'Остановлена',
                 'Требует уточнения',
-            ]);
+            ])->comment('Статус');
             $table->enum('type', [
                 'Обучение',
                 'Разработка',
                 'Проектирование',
                 'Инфраструктура',
                 'Техподдержка',
-            ]);
+            ])->comment('Тип статуса');
             $table->date('start_date')->comment('Планируемая дата начала');
             $table->date('end_date')->comment('Планируемая дата завершения');
-            $table->text('description');
+            $table->text('description')->comment('Описание');
             $table->timestamps();
 
             $table->foreignUuid('employee_uuid')->nullable()->references('uuid')->on('employees')->onDelete('set null');

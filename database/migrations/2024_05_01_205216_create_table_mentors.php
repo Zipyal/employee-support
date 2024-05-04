@@ -15,25 +15,23 @@ return new class extends Migration {
     {
         Schema::create(self::TABLE_NAME, function (Blueprint $table) {
             $table->uuid()->primary();
-            $table->string('last_name');
-            $table->string('first_name');
-            $table->string('patronymic');
-            $table->string('phone');
-            $table->string('email');
+            $table->string('last_name')->comment('Фамилия');
+            $table->string('first_name')->comment('Имя');
+            $table->string('patronymic')->comment('Отчество');
+            $table->string('phone')->comment('Номер телефона');
+            $table->string('email')->comment('Почта');
             $table->enum('role', [
                 'Сотрудник',
                 'Наставник',
                 'Администратор',
-            ])->nullable();
-            $table->string('position');
-            $table->string('department');
-            $table->string('education');
-            $table->string('add_education')->nullable();
-            $table->unsignedSmallInteger('experience');
+            ])->nullable()->comment('Роль');
+            $table->string('position')->comment('Должность');
+            $table->string('department')->comment('Отдел');
+            $table->string('education')->comment('Образование');
+            $table->string('add_education')->nullable()->comment('Дополнительное образование');
+            $table->unsignedSmallInteger('experience')->comment('Опыт работы');
             $table->timestamps();
-
         });
-
     }
 
     /**

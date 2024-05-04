@@ -15,8 +15,8 @@ return new class extends Migration {
     {
         Schema::create(self::TABLE_NAME, function (Blueprint $table) {
             $table->uuid()->primary();
-            $table->string('subject');
-            $table->text('text');
+            $table->string('subject')->comment('Объект');
+            $table->text('text')->comment('Текст');
             $table->timestamps();
         });
     }

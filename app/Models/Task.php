@@ -11,16 +11,11 @@ use Illuminate\Support\Carbon;
  * Class Task
  * @package App\Models
  *
- * @property int $ID_Задачи
- * @property string $Статус
- * @property string $ТипЗадачи
- * @property Carbon $ДатаНазначения
- * @property Carbon $СрокВыполнения
- * @property string $Комментарий
- * @property string $ID_Сотрудника
- * @property string $ID_Статьи
- * @property string $ID_Теста
- * @property string $ID_Инструктажа
+ * @property string $status
+ * @property string $type
+ * @property Carbon $start_date
+ * @property Carbon $end_date
+ * @property string $description
  *
  * @property Employee $employee
  * @property Material $material
@@ -31,30 +26,47 @@ class Task extends Model
 {
     use HasFactory;
 
-    public $table = 'Задача';
-    public $timestamps = false;
-    protected $primaryKey ='ID_Задачи';
-    protected $keyType = 'int';
-    protected string $autoincrement = 'true';
+    public const STATUSES = [
+        'Новая',
+        'В работе',
+        'Завершена',
+        'Отклонена',
+        'Остановлена',
+        'Требует уточнения',
+    ];
+
+    public const TYPES = [
+        'Обучение',
+        'Разработка',
+        'Проектирование',
+        'Инфраструктура',
+        'Техподдержка',
+    ];
+
+    protected $guarded = [
+        'uuid',
+        'created_at',
+        'updated_at',
+    ];
 
     public function employee(): BelongsTo
     {
-        return $this->belongsTo(Employee::class, 'ID_Сотрудника', 'ID_Сотрудника');
+        return $this->belongsTo(Employee::class, 'employee_uuid', 'uuid');
     }
 
     public function material(): BelongsTo
     {
-        return $this->belongsTo(Material::class, 'ID_Статьи', 'ID_Статьи');
+        return $this->belongsTo(Material::class, 'material_uuid', 'uuid');
     }
 
     public function test(): BelongsTo
     {
-        return $this->belongsTo(Test::class, 'ID_Теста', 'ID_Теста');
+        return $this->belongsTo(Test::class, 'test_uuid', 'uuid');
     }
 
     public function briefing(): BelongsTo
     {
-        return $this->belongsTo(Briefing::class, 'ID_Инструктажа', 'ID_Инструктаж');
+        return $this->belongsTo(Briefing::class, 'briefing_uuid', 'uuid');
     }
 }
 

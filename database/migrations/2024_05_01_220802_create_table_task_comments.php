@@ -15,7 +15,7 @@ return new class extends Migration {
     {
         Schema::create(self::TABLE_NAME, function (Blueprint $table) {
             $table->uuid()->primary();
-            $table->text('text');
+            $table->text('text')->comment('Комментарий задачи');
             $table->timestamps();
 
             $table->foreignUuid('task_uuid')->references('uuid')->on('tasks')->onDelete('cascade');

@@ -13,9 +13,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * Class Briefing
  * @package App\Models
  *
- * @property string $ID_Инструктаж
- * @property string $Тема
- * @property string $Материал
+ * @property string $subject
+ * @property string $text
  *
  * @property Task[]|Collection $tasks
  */
@@ -24,15 +23,11 @@ class Briefing extends Model
     use HasFactory;
     use HasUuids;
 
-    public $table = 'Инструктаж';
-    public $timestamps = false;
-    protected $primaryKey = 'ID_Инструктаж';
-    protected $keyType = 'string';
-
-    public function mentor(): BelongsTo
-    {
-        return $this->belongsTo(Mentor::class, 'ID_Наставника', 'ID_Наставника');
-    }
+    protected $guarded = [
+        'uuid',
+        'created_at',
+        'updated_at',
+    ];
 
     public function tasks(): HasMany
     {

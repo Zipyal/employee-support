@@ -12,10 +12,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * Class Test
  * @package App\Models
  *
- * @property string $ID_Теста
- * @property string $Категория
- * @property string $Тема
- * @property string $СсылкаНаТест
+ * @property string $category
+ * @property string $subject
+ * @property string $url
  *
  * @property Task[]|Collection $tasks
  */
@@ -24,10 +23,11 @@ class Test extends Model
     use HasFactory;
     use HasUuids;
 
-    public $table = 'Тест';
-    public $timestamps = false;
-    protected $primaryKey ='ID_Теста';
-    protected $keyType = 'string';
+    protected $guarded = [
+        'uuid',
+        'created_at',
+        'updated_at',
+    ];
 
     public function tasks(): HasMany
     {

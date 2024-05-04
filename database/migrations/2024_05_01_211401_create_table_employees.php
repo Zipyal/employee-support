@@ -16,20 +16,20 @@ return new class extends Migration
     {
         Schema::create(self::TABLE_NAME, function (Blueprint $table) {
             $table->uuid()->primary();
-            $table->string('last_name');
-            $table->string('first_name');
-            $table->string('patronymic');
-            $table->string('phone');
-            $table->string('email');
-            $table->date('birth_date');
-            $table->string('education');
-            $table->string('add_education')->nullable();
-            $table->unsignedSmallInteger('experience');
+            $table->string('last_name')->comment('Фамилия');
+            $table->string('first_name')->comment('Имя');
+            $table->string('patronymic')->comment('Отчество');
+            $table->string('phone')->comment('Номер телефона');
+            $table->string('email')->comment('Почта');
+            $table->date('birth_date')->comment('Дата рождения');
+            $table->string('education')->comment('Оброзование');
+            $table->string('add_education')->nullable()->comment('Дополнительное образование');
+            $table->unsignedSmallInteger('experience')->comment('Опыт работы');
             $table->enum('role', [
                 'Сотрудник',
                 'Наставник',
                 'Администратор',
-            ])->nullable();
+            ])->nullable()->comment('Роль');
             $table->timestamps();
 
             $table->foreignUuid('mentor_uuid')->nullable()->references('uuid')->on('mentors')->onDelete('set null');
