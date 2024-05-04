@@ -38,6 +38,9 @@ class Mentor extends Model
         'Администратор',
     ];
 
+    public $incrementing = false;
+    protected $primaryKey = 'uuid';
+
     protected $guarded = [
         'uuid',
         'created_at',
