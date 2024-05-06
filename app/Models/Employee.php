@@ -66,4 +66,8 @@ class Employee extends Model
         return $this->HasMany(Task::class);
     }
 
+    public function materials(): HasMany
+    {
+        return $this->HasMany(material::class);
+    }
 }
