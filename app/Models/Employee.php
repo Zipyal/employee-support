@@ -19,14 +19,15 @@ use Illuminate\Database\Eloquent\Collection;
  * @property string $patronymic
  * @property string $phone
  * @property string $email
- * @property string $birth_date
+ * @property carbon $birth_date
  * @property string $education
  * @property string $add_education
  * @property string $experience
  * @property string $role
  *
- * @property Mentor $mentor
+ * @property Employee $employee
  * @property EmploymentContract $employmentContract
+ * @property Material[]|Collection $materials
  * @property Task[]|Collection $tasks
  */
 class Employee extends Model
@@ -34,23 +35,24 @@ class Employee extends Model
     use HasFactory;
     use HasUuids;
 
-
-    protected $fillable = [
-        'last_name',
-        'first_name',
-        'patronymic',
-        'phone',
-        'email',
-        'birth_date',
-        'education',
-        'add_education',
-        'experience',
-        'role',
+    public const ROLES = [
+        'Сотрудник',
+        'Наставник',
+        'Администратор',
     ];
 
-    public function mentor(): BelongsTo
+    public $incrementing = false;
+    protected $primaryKey = 'uuid';
+
+    protected $guarded = [
+        'uuid',
+        'created_at',
+        'updated_at',
+    ];
+
+    public function employee(): BelongsTo
     {
-        return $this->belongsTo(Mentor::class, 'mentor_uuid', 'uuid');
+        return $this->belongsTo(Employee::class, 'employee_uuid', 'uuid');
     }
 
     public function employmentContract(): BelongsTo
@@ -61,5 +63,15 @@ class Employee extends Model
     public function tasks(): HasMany
     {
         return $this->HasMany(Task::class);
+    }
+
+    public function employee(): HasMany
+    {
+        return $this->hasMany(Material::class);
+    }
+
+    public function employees(): HasMany
+    {
+        return $this->hasMany(Employee::class);
     }
 }
