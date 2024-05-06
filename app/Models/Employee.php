@@ -25,6 +25,7 @@ use Illuminate\Database\Eloquent\Collection;
  * @property string $experience
  * @property string $role
  *
+ * @property Employee $mentor
  * @property Employee $employee
  * @property EmploymentContract $employmentContract
  * @property Material[]|Collection $materials
@@ -50,6 +51,12 @@ class Employee extends Model
         'updated_at',
     ];
 
+
+    public function mentor(): BelongsTo
+    {
+        return $this->belongsTo(Employee::class, 'mentor_uuid', 'uuid');
+    }
+
     public function employee(): BelongsTo
     {
         return $this->belongsTo(Employee::class, 'employee_uuid', 'uuid');
@@ -65,13 +72,4 @@ class Employee extends Model
         return $this->HasMany(Task::class);
     }
 
-    public function employee(): HasMany
-    {
-        return $this->hasMany(Material::class);
-    }
-
-    public function employees(): HasMany
-    {
-        return $this->hasMany(Employee::class);
-    }
 }
