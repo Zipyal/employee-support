@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\MaterialController;
-use App\Http\Controllers\MentorController;
+use App\Http\Controllers\EmployeeController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -24,12 +24,12 @@ Route::get('/tasks', function () {
     return view('tasks');
 });
 
-Route::get('/mentors', [MentorController::class, 'index'])->name('mentors');
-Route::get('/mentors/add', [MentorController::class, 'add'])->name('mentor-add');
-Route::post('/mentors/add', [MentorController::class, 'store'])->name('mentor-store');
-Route::get('/mentors/{id}', [MentorController::class, 'show'])->name('mentor-show');
-Route::get('/mentors/{id}/edit', [MentorController::class, 'edit'])->name('mentor-edit');
-Route::post('/mentors/{id}/edit', [MentorController::class, 'update'])->name('mentor-update');
-Route::post('/mentors/{id}/delete', [MentorController::class, 'delete'])->name('mentor-delete');
+Route::get('/mentors', [EmployeeController::class, 'index'])->name('mentors');
+Route::get('/mentors/add', [EmployeeController::class, 'add'])->name('mentor-add');
+Route::post('/mentors/add', [EmployeeController::class, 'store'])->name('mentor-store');
+Route::get('/mentors/{id}', [EmployeeController::class, 'show'])->name('mentor-show');
+Route::get('/mentors/{id}/edit', [EmployeeController::class, 'edit'])->name('mentor-edit');
+Route::post('/mentors/{id}/edit', [EmployeeController::class, 'update'])->name('mentor-update');
+Route::post('/mentors/{id}/delete', [EmployeeController::class, 'delete'])->name('mentor-delete');
 
 
