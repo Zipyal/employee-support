@@ -72,4 +72,5 @@ class Employee extends Model
         return $this->HasMany(Task::class);
     }
 
+
 }
