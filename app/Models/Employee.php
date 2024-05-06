@@ -19,7 +19,7 @@ use Illuminate\Database\Eloquent\Collection;
  * @property string $patronymic
  * @property string $phone
  * @property string $email
- * @property carbon $birth_date
+ * @property Carbon $birth_date
  * @property string $education
  * @property string $add_education
  * @property string $experience
