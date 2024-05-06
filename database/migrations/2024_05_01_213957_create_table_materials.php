@@ -21,7 +21,7 @@ return new class extends Migration
             $table->text('text')->comment('Текст статьи');
             $table->timestamps();
 
-            $table->foreignUuid('mentor_uuid')->nullable()->references('uuid')->on('mentors')->onDelete('set null');
+            $table->foreignUuid('mentor_uuid')->nullable()->references('uuid')->on('employee')->onDelete('set null');
         });
     }
 

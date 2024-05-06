@@ -32,7 +32,7 @@ return new class extends Migration
             ])->nullable()->comment('Роль');
             $table->timestamps();
 
-            $table->foreignUuid('mentor_uuid')->nullable()->references('uuid')->on('mentors')->onDelete('set null');
+            $table->foreignUuid('mentor_uuid')->nullable()->references('uuid')->on('employee')->onDelete('set null');
         });
     }
 
