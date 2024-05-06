@@ -26,7 +26,6 @@ use Illuminate\Database\Eloquent\Collection;
  * @property string $role
  *
  * @property Employee $mentor
- * @property Employee $employee
  * @property EmploymentContract $employmentContract
  * @property Material[]|Collection $materials
  * @property Task[]|Collection $tasks
@@ -57,11 +56,6 @@ class Employee extends Model
         return $this->belongsTo(Employee::class, 'mentor_uuid', 'uuid');
     }
 
-    public function employee(): BelongsTo
-    {
-        return $this->belongsTo(Employee::class, 'employee_uuid', 'uuid');
-    }
-
     public function employmentContract(): BelongsTo
     {
         return $this->belongsTo(EmploymentContract::class, 'employment_contract_uuid', 'uuid');
@@ -71,6 +65,5 @@ class Employee extends Model
     {
         return $this->HasMany(Task::class);
     }
-
 
 }
