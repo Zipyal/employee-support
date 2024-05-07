@@ -20,6 +20,8 @@ return new class extends Migration {
             $table->string('patronymic')->comment('Отчество');
             $table->string('phone')->comment('Номер телефона');
             $table->string('email')->comment('Почта');
+            $table->string('position')->comment('Должность');
+            $table->string('department')->comment('Отдел');
             $table->date('birth_date')->comment('Дата рождения');
             $table->string('education')->comment('Оброзование');
             $table->string('add_education')->nullable()->comment('Дополнительное образование');

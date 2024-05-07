@@ -19,6 +19,8 @@ use Illuminate\Database\Eloquent\Collection;
  * @property string $patronymic
  * @property string $phone
  * @property string $email
+ * @property string $position
+ * @property string $department
  * @property Carbon $birth_date
  * @property string $education
  * @property string $add_education

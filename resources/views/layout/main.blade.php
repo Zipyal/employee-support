@@ -41,7 +41,7 @@
                         <a class="nav-link" href="#">Сотрудники</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('employee') }}">Наставники</a>
+                        <a class="nav-link" href="{{ route('employee') }}">Сотрудники</a>
                     </li>
                 </ul>
             </div>

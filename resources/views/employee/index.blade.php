@@ -7,7 +7,7 @@
 
     <div class="row">
         <div class="col">
-            <h1>Наставники</h1>
+            <h1>Сотрудники</h1>
         </div>
         <div class="col text-end">
             <a class="btn btn-sm btn-success" href="{{ route('employee-add') }}"><strong class="fs-1 m-0 lh-1">+</strong></a>
@@ -21,6 +21,7 @@
             <th scope="col">ФИО</th>
             <th scope="col">Телефон</th>
             <th scope="col">Эл. почта</th>
+            <th scope="col">Дата рождения</th>
             <th scope="col">Роль</th>
             <th scope="col">Должность</th>
             <th scope="col">Отдел</th>
@@ -37,6 +38,7 @@
                 <td>{{ $employee->last_name . ' ' . $employee->first_name . ' ' . $employee->patronymic }}</td>
                 <td>{{ $employee->phone }}</td>
                 <td>{{ $employee->email }}</td>
+                <td>{{ $employee->birth_date }}</td>
                 <td>{{ $employee->role }}</td>
                 <td>{{ $employee->position }}</td>
                 <td>{{ $employee->department }}</td>
