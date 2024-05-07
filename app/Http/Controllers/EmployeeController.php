@@ -50,7 +50,7 @@ class EmployeeController extends Controller
 
         Employee::query()->create($validated);
 
-        return redirect()->route('/employee');
+        return redirect()->route('employee');
     }
 
     public function edit(string $id)
@@ -67,7 +67,7 @@ class EmployeeController extends Controller
         $employee = Employee::query()->findOrFail($id);
         $validated = $request->validate(self::VALIDATION_RULES);
         $employee->update($validated);
-        return redirect()->route('/employee');
+        return redirect()->route('employee');
     }
 
     public function delete($id)
@@ -75,7 +75,7 @@ class EmployeeController extends Controller
         /** @var Employee $employee */
         $employee = Employee::query()->findOrFail($id);
         $employee->delete();
-        return redirect()->route('/employee');
+        return redirect()->route('employee-store');
     }
 }
 
