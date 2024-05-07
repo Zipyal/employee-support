@@ -6,7 +6,6 @@
     @endphp
 
 
-    <div class="row">
         <div class="container">
             <div class="row mt-2 mb-5">
                 <div class="col">
@@ -33,7 +32,6 @@
                 </div>
             </div>
         </div>
-    </div>
 
     <table class="table table-hover">
         <thead>
