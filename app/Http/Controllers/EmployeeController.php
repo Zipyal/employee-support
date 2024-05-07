@@ -75,7 +75,7 @@ class EmployeeController extends Controller
         /** @var Employee $employee */
         $employee = Employee::query()->findOrFail($id);
         $employee->delete();
-        return redirect()->route('employee-store');
+        return redirect()->route('employee');
     }
 }
 
