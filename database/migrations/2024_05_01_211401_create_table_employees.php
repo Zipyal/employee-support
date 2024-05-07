@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
 
     const TABLE_NAME = 'employees';
 
@@ -32,8 +31,9 @@ return new class extends Migration
             ])->nullable()->comment('Роль');
             $table->uuid('mentor_uuid')->nullable();
             $table->timestamps();
-
-            $table->foreign('mentor_uuid')->references('uuid')->on('employees')->onDelete('set null');
+        });
+        Schema::table(self::TABLE_NAME, function (Blueprint $table) {
+            $table->foreign('mentor_uuid')->references('uuid')->on(self::TABLE_NAME)->onDelete('no action')->onUpdate('no action');
         });
     }
 
