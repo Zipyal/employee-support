@@ -33,7 +33,7 @@ class EmployeeController extends Controller
 
         return view('employee.index', [
             'employees' => $employees,
-            'roles ' => Employee::ROLES,
+            'roles' => Employee::ROLES,
         ]);
     }
 
