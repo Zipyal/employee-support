@@ -14,7 +14,7 @@ class EmployeeController extends Controller
         'phone' => 'required|regex:/^[0-9 -()+]+$/',
         'role' => 'required',
         'email' => 'required|email',
-        'birth_date' => 'required|date',
+        'birth_date' => 'required|date:Y-m-d',
         'position' => 'required',
         'department' => 'required',
         'education' => 'required',

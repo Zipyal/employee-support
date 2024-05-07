@@ -38,9 +38,6 @@
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Сотрудники</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" href="{{ route('employee') }}">Сотрудники</a>
                     </li>
                 </ul>
