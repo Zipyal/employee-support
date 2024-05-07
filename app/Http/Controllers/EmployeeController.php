@@ -22,12 +22,20 @@ class EmployeeController extends Controller
         'experience' => 'required|integer',
     ];
 
-    public function index()
+    public function index(Request $request)
     {
+        $role = $request->get('role');
+        if (strlen($role) && in_array($role, Employee::ROLES)) {
+            $employees = Employee::query()->where('role', '=', $role)->get();
+        } else {
+            $employees = Employee::query()->get();
+        }
+
         return view('employee.index', [
-            'employees' => Employee::query()->get()
+            'employees' => $employees,
         ]);
     }
+
 
     public function show(string $id)
     {
