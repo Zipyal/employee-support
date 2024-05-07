@@ -2,7 +2,7 @@
 @section('content')
 
     @php
-        /** @var $employees \App\Models\Employee[]|\Illuminate\Database\Eloquent\Collection */
+        /** @var $employee \App\Models\Employee[]|\Illuminate\Database\Eloquent\Collection */
     @endphp
 
     <div class="row">

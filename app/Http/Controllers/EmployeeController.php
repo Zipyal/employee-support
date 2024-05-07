@@ -14,6 +14,7 @@ class EmployeeController extends Controller
         'phone' => 'required|regex:/^[0-9 -()+]+$/',
         'role' => 'required',
         'email' => 'required|email',
+        'birth_date' => 'required|date',
         'position' => 'required',
         'department' => 'required',
         'education' => 'required',
@@ -29,14 +30,14 @@ class EmployeeController extends Controller
 
     public function show(string $id)
     {
-        return view('employees.view', [
+        return view('employee.view', [
             'employee' => Employee::query()->findOrFail($id)
         ]);
     }
 
     public function add()
     {
-        return view('employees.edit', [
+        return view('employee.edit', [
             'employee' => new Employee(),
             'roles' => Employee::ROLES,
         ]);
@@ -49,12 +50,12 @@ class EmployeeController extends Controller
 
         Employee::query()->create($validated);
 
-        return redirect('/employees');
+        return redirect('/employee');
     }
 
     public function edit(string $id)
     {
-        return view('employees.edit', [
+        return view('employee.edit', [
             'employee' => Employee::query()->findOrFail($id),
             'roles' => Employee::ROLES,
         ]);
@@ -66,7 +67,7 @@ class EmployeeController extends Controller
         $employee = Employee::query()->findOrFail($id);
         $validated = $request->validate(self::VALIDATION_RULES);
         $employee->update($validated);
-        return redirect('/employees');
+        return redirect('/employee');
     }
 
     public function delete($id)
@@ -74,7 +75,7 @@ class EmployeeController extends Controller
         /** @var Employee $employee */
         $employee = Employee::query()->findOrFail($id);
         $employee->delete();
-        return redirect('/employees');
+        return redirect('/employee');
     }
 }
 

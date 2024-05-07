@@ -24,12 +24,12 @@ Route::get('/tasks', function () {
     return view('tasks');
 });
 
-Route::get('/employee', [EmployeeController::class, 'index'])->name('employee');
-Route::get('/employee/add', [EmployeeController::class, 'add'])->name('employee-add');
-Route::post('/employee/add', [EmployeeController::class, 'store'])->name('employee-store');
-Route::get('/employee/{id}', [EmployeeController::class, 'show'])->name('employee-show');
-Route::get('/employee/{id}/edit', [EmployeeController::class, 'edit'])->name('employee-edit');
-Route::post('/employee/{id}/edit', [EmployeeController::class, 'update'])->name('employee-update');
-Route::post('/employee/{id}/delete', [EmployeeController::class, 'delete'])->name('employee-delete');
+Route::get('/employees', [EmployeeController::class, 'index'])->name('employee');
+Route::get('/employees/add', [EmployeeController::class, 'add'])->name('employee-add');
+Route::post('/employees/add', [EmployeeController::class, 'store'])->name('employee-store');
+Route::get('/employees/{id}', [EmployeeController::class, 'show'])->name('employee-show');
+Route::get('/employees/{id}/edit', [EmployeeController::class, 'edit'])->name('employee-edit');
+Route::post('/employees/{id}/edit', [EmployeeController::class, 'update'])->name('employee-update');
+Route::post('/employees/{id}/delete', [EmployeeController::class, 'delete'])->name('employee-delete');
 
 
