@@ -18,6 +18,7 @@ class EmployeeController extends Controller
         'position' => 'required',
         'department' => 'required',
         'education' => 'required',
+        'add_education' => 'nullable',
         'experience' => 'required|integer',
     ];
 
