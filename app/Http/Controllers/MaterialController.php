@@ -41,7 +41,7 @@ class MaterialController extends Controller
     {
         return view('material.edit', [
             'material' => new Material(),
-            'roles' => Material::ROLES,
+            'roles' => Employee::ROLES,
         ]);
     }
 
@@ -59,7 +59,7 @@ class MaterialController extends Controller
     {
         return view('material.edit', [
             'material' => Material::query()->findOrFail($id),
-            'roles' => Material::ROLES,
+            'roles' => Employee::ROLES,
         ]);
     }
 
