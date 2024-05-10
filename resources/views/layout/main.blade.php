@@ -23,7 +23,7 @@
                         <a class="nav-link" href="#">Инструктажы</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Материалы</a>
+                        <a class="nav-link" href="{{ route('material') }}">Материалы</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Тестирования</a>

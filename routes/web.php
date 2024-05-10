@@ -8,9 +8,9 @@ Route::get('/', function () {
     return view('home');
 });
 
-Route::get('/materials', [MaterialController::class, 'index']);
+Route::get('/materials', [MaterialController::class, 'index'])->name('material');
 Route::get('/materials/add', [MaterialController::class, 'add'])->name('material-add');
-Route::post('/materials/add', [MaterialController::class, 'create'])->name('material-create');
+Route::post('/materials/add', [MaterialController::class, 'store'])->name('material-store');
 Route::get('/materials/{id}', [MaterialController::class, 'show'])->name('material-show');
 Route::get('/materials/{id}/edit', [MaterialController::class, 'edit'])->name('material-edit');
 Route::post('/materials/{id}/edit', [MaterialController::class, 'update'])->name('material-update');
@@ -33,3 +33,19 @@ Route::post('/employees/{id}/edit', [EmployeeController::class, 'update'])->name
 Route::post('/employees/{id}/delete', [EmployeeController::class, 'delete'])->name('employee-delete');
 
 
+Route::get('/tasks', [EmployeeController::class, 'index'])->name('tasks');
+Route::get('/tasks/add', [EmployeeController::class, 'add'])->name('tasks-add');
+Route::post('/tasks/add', [EmployeeController::class, 'store'])->name('tasks-store');
+Route::get('/tasks/{id}', [EmployeeController::class, 'show'])->name('tasks-show');
+Route::get('/tasks/{id}/edit', [EmployeeController::class, 'edit'])->name('tasks-edit');
+Route::post('/tasks/{id}/edit', [EmployeeController::class, 'update'])->name('tasks-update');
+Route::post('/tasks/{id}/delete', [EmployeeController::class, 'delete'])->name('tasks-delete');
+
+
+Route::get('/tests', [EmployeeController::class, 'index'])->name('tests');
+Route::get('/tests/add', [EmployeeController::class, 'add'])->name('tests-add');
+Route::post('/tests/add', [EmployeeController::class, 'store'])->name('tests-store');
+Route::get('/tests/{id}', [EmployeeController::class, 'show'])->name('tests-show');
+Route::get('/tests/{id}/edit', [EmployeeController::class, 'edit'])->name('tests-edit');
+Route::post('/tests/{id}/edit', [EmployeeController::class, 'update'])->name('tests-update');
+Route::post('/tests/{id}/delete', [EmployeeController::class, 'delete'])->name('tests-delete');

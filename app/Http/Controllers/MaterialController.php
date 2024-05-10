@@ -2,49 +2,64 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Employee;
 use App\Models\Material;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 
 class MaterialController extends Controller
 {
-    public function index()
+    const VALIDATION_RULES = [
+        'subject' => 'required',
+        'category' => 'required',
+        'text' => 'required',
+    ];
+
+    public function index(Request $request)
     {
-        return view('materials.index', [
-            'materials' => Material::query()->get()
+        $role = $request->get('role');
+        if (strlen($role) && in_array($role, Material::ROLES)) {
+            $materials = Material::query()->where('role', '=', $role)->get();
+        } else {
+            $materials = Material::query()->get();
+        }
+
+        return view('material.index', [
+            'materials' => $materials,
+            'roles' => Employee::ROLES,
         ]);
     }
 
+
     public function show(string $id)
     {
-        return view('materials.view', [
+        return view('material.view', [
             'material' => Material::query()->findOrFail($id)
         ]);
     }
 
     public function add()
     {
-        return view('materials.edit', [
-            'material' => new Material()
+        return view('material.edit', [
+            'material' => new Material(),
+            'roles' => Material::ROLES,
         ]);
     }
 
-    public function create(Request $request)
+    public function store(Request $request)
     {
-        /** @var Material $material */
-        $material = new Material();
-        $material->Тема = $request->request->get('Тема');
-        $material->Категория = $request->request->get('Категория');
-        $material->ID_Наставника = $request->request->get('ID_Наставника');
-        $material->save();
+        $validated = $request->validate(self::VALIDATION_RULES);
 
-        return redirect('/materials');
+
+        Material::query()->create($validated);
+
+        return redirect()->route('material');
     }
 
     public function edit(string $id)
     {
-        return view('materials.edit', [
-            'material' => Material::query()->findOrFail($id)
+        return view('material.edit', [
+            'material' => Material::query()->findOrFail($id),
+            'roles' => Material::ROLES,
         ]);
     }
 
@@ -52,11 +67,9 @@ class MaterialController extends Controller
     {
         /** @var Material $material */
         $material = Material::query()->findOrFail($id);
-        $material->Тема = $request->request->get('Тема');
-        $material->Категория = $request->request->get('Категория');
-        $material->save();
-
-        return redirect('/materials');
+        $validated = $request->validate(self::VALIDATION_RULES);
+        $material->update($validated);
+        return redirect()->route('material');
     }
 
     public function delete($id)
@@ -64,7 +77,7 @@ class MaterialController extends Controller
         /** @var Material $material */
         $material = Material::query()->findOrFail($id);
         $material->delete();
-        return redirect('/materials');
+        return redirect()->route('material');
     }
 }
 
