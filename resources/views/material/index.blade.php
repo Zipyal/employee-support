@@ -16,17 +16,6 @@
                         class="fs-1 m-0 lh-1">+</strong></a>
             </div>
         </div>
-
-        <div class="p-3 mb-3 bg-light row">
-            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                <form method="get" action="{{ url()->current() }}">
-                    <label class="text-muted" for="filter-role">Роль: </label>
-                    <select id="filter-role" class="form-control form-select" name="role" onchange="this.form.submit()">
-                        <option value="">- не выбрано -</option>
-                    </select>
-                </form>
-            </div>
-        </div>
     </div>
 
     <table class="table table-hover">
