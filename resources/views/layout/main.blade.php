@@ -20,7 +20,7 @@
                         <a class="nav-link active" aria-current="page" href="#">Лента</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Инструктажы</a>
+                        <a class="nav-link" href="{{ route('briefing') }}">Инструктажы</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('material') }}">Материалы</a>

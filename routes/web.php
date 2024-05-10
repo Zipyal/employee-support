@@ -49,3 +49,11 @@ Route::get('/tests/{id}', [EmployeeController::class, 'show'])->name('tests-show
 Route::get('/tests/{id}/edit', [EmployeeController::class, 'edit'])->name('tests-edit');
 Route::post('/tests/{id}/edit', [EmployeeController::class, 'update'])->name('tests-update');
 Route::post('/tests/{id}/delete', [EmployeeController::class, 'delete'])->name('tests-delete');
+
+Route::get('/briefings', [BriefingController::class, 'index'])->name('briefing');
+Route::get('/briefings/add', [BriefingController::class, 'add'])->name('briefing-add');
+Route::post('/briefings/add', [BriefingController::class, 'store'])->name('briefing-store');
+Route::get('/briefings/{id}', [BriefingController::class, 'show'])->name('briefing-show');
+Route::get('/briefings/{id}/edit', [BriefingController::class, 'edit'])->name('briefing-edit');
+Route::post('/briefings/{id}/edit', [BriefingController::class, 'update'])->name('briefing-update');
+Route::post('/briefings/{id}/delete', [BriefingController::class, 'delete'])->name('briefing-delete');
