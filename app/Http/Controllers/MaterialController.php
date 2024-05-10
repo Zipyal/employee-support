@@ -12,20 +12,15 @@ class MaterialController extends Controller
         'subject' => 'required',
         'category' => 'required',
         'text' => 'required',
+        'mentor_uuid' => 'required|exists:employees,uuid',
     ];
 
     public function index(Request $request)
     {
-        $role = $request->get('role');
-        if (strlen($role) && in_array($role, Material::ROLES)) {
-            $materials = Material::query()->where('role', '=', $role)->get();
-        } else {
-            $materials = Material::query()->get();
-        }
+        $materials = Material::query()->get();
 
         return view('material.index', [
             'materials' => $materials,
-            'roles' => Employee::ROLES,
         ]);
     }
 
@@ -41,7 +36,6 @@ class MaterialController extends Controller
     {
         return view('material.edit', [
             'material' => new Material(),
-            'roles' => Employee::ROLES,
         ]);
     }
 
@@ -59,7 +53,6 @@ class MaterialController extends Controller
     {
         return view('material.edit', [
             'material' => Material::query()->findOrFail($id),
-            'roles' => Employee::ROLES,
         ]);
     }
 
