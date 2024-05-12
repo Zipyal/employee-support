@@ -2,17 +2,17 @@
 @section('content')
 
     @php
-        /** @var $briefing \App\Models\Briefing[]|\Illuminate\Database\Eloquent\Collection */
+        /** @var $test \App\Models\Test[]|\Illuminate\Database\Eloquent\Collection */
     @endphp
 
 
     <div class="container">
         <div class="row mt-2 mb-5">
             <div class="col">
-                <h1>Инструктажы</h1>
+                <h1>Тесты</h1>
             </div>
             <div class="col text-end">
-                <a class="btn btn-sm btn-success" href="{{ route('briefing-add') }}"><strong
+                <a class="btn btn-sm btn-success" href="{{ route('test-add') }}"><strong
                         class="fs-1 m-0 lh-1">+</strong></a>
             </div>
         </div>
@@ -28,18 +28,18 @@
         </tr>
         </thead>
         <tbody>
-        @foreach($briefings as $i => $briefing)
+        @foreach($tests as $i => $test)
             <tr>
                 <td>{{ $i+1 }}</td>
-                <td>{{ $briefing->subject }}</td>
-                <td>{{ $briefing->category }}</td>
-                <td>{{ $briefing->text }}</td>
+                <td>{{ $test->subject }}</td>
+                <td>{{ $test->category }}</td>
+                <td>{{ $test->text }}</td>
                 <td>
                     <a class="btn btn-sm btn-outline-dark"
-                       href="{{ route('briefing-show', ['id' => $briefing]) }}">👁</a>
+                       href="{{ route('test-show', ['id' => $test]) }}">👁</a>
                     <a class="btn btn-sm btn-outline-dark"
-                       href="{{ route('briefing-edit', ['id' => $briefing]) }}">✎</a>
-                    <form method="post" class="d-inline" action="{{ route('briefing-delete', ['id' => $briefing]) }}"
+                       href="{{ route('test-edit', ['id' => $test]) }}">✎</a>
+                    <form method="post" class="d-inline" action="{{ route('test-delete', ['id' => $test]) }}"
                           onSubmit="if(!confirm('Вы действительно хотите удалить?')){return false;}">@csrf <input
                             type="submit" class="btn btn-sm btn-danger" value="🗑"></form>
                 </td>

@@ -1,7 +1,10 @@
 <?php
 
+use App\Http\Controllers\BriefingController;
 use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\TaskController;
+use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -33,22 +36,22 @@ Route::post('/employees/{id}/edit', [EmployeeController::class, 'update'])->name
 Route::post('/employees/{id}/delete', [EmployeeController::class, 'delete'])->name('employee-delete');
 
 
-Route::get('/tasks', [EmployeeController::class, 'index'])->name('tasks');
-Route::get('/tasks/add', [EmployeeController::class, 'add'])->name('tasks-add');
-Route::post('/tasks/add', [EmployeeController::class, 'store'])->name('tasks-store');
-Route::get('/tasks/{id}', [EmployeeController::class, 'show'])->name('tasks-show');
-Route::get('/tasks/{id}/edit', [EmployeeController::class, 'edit'])->name('tasks-edit');
-Route::post('/tasks/{id}/edit', [EmployeeController::class, 'update'])->name('tasks-update');
-Route::post('/tasks/{id}/delete', [EmployeeController::class, 'delete'])->name('tasks-delete');
+Route::get('/tasks', [TaskController::class, 'index'])->name('task');
+Route::get('/tasks/add', [TaskController::class, 'add'])->name('tasks-add');
+Route::post('/tasks/add', [TaskController::class, 'store'])->name('tasks-store');
+Route::get('/tasks/{id}', [TaskController::class, 'show'])->name('tasks-show');
+Route::get('/tasks/{id}/edit', [TaskController::class, 'edit'])->name('tasks-edit');
+Route::post('/tasks/{id}/edit', [TaskController::class, 'update'])->name('tasks-update');
+Route::post('/tasks/{id}/delete', [TaskController::class, 'delete'])->name('tasks-delete');
 
 
-Route::get('/tests', [EmployeeController::class, 'index'])->name('tests');
-Route::get('/tests/add', [EmployeeController::class, 'add'])->name('tests-add');
-Route::post('/tests/add', [EmployeeController::class, 'store'])->name('tests-store');
-Route::get('/tests/{id}', [EmployeeController::class, 'show'])->name('tests-show');
-Route::get('/tests/{id}/edit', [EmployeeController::class, 'edit'])->name('tests-edit');
-Route::post('/tests/{id}/edit', [EmployeeController::class, 'update'])->name('tests-update');
-Route::post('/tests/{id}/delete', [EmployeeController::class, 'delete'])->name('tests-delete');
+Route::get('/tests', [TestController::class, 'index'])->name('test');
+Route::get('/tests/add', [TestController::class, 'add'])->name('test-add');
+Route::post('/tests/add', [TestController::class, 'store'])->name('test-store');
+Route::get('/tests/{id}', [TestController::class, 'show'])->name('test-show');
+Route::get('/tests/{id}/edit', [TestController::class, 'edit'])->name('test-edit');
+Route::post('/tests/{id}/edit', [TestController::class, 'update'])->name('test-update');
+Route::post('/tests/{id}/delete', [TestController::class, 'delete'])->name('test-delete');
 
 Route::get('/briefings', [BriefingController::class, 'index'])->name('briefing');
 Route::get('/briefings/add', [BriefingController::class, 'add'])->name('briefing-add');
