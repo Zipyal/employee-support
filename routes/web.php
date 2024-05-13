@@ -71,3 +71,27 @@ Route::get('/employees/contracts/{contractId}', [EmploymentContractController::c
 Route::get('/employees/contracts/{contractId}/edit', [EmploymentContractController::class, 'edit'])->name('employee-edit-contract');
 Route::post('/employees/contracts/{contractId}/edit', [EmploymentContractController::class, 'update'])->name('employee-update-contract');
 Route::post('/employees/contracts/{contractId}/delete', [EmploymentContractController::class, 'delete'])->name('employee-delete-contract');
+
+Route::name('user.')->group(function () {
+    Route::view('/private', 'private')->middleware('auth')->name('private');
+
+    Route::get('/login', function () {
+        if (Auth::check()) {
+            return redirect(route('user.private'));
+        }
+        return view('login');
+    })->name('login');
+
+    //Route::post('/login', []);
+
+    //Route::get('logout',[])->name('logout');
+
+    Route::get('/registration', function (){
+        if (Auth::check()) {
+            return redirect(route('user.private'));
+        }
+        return view('registration');
+    })->name('registration');
+
+    //Route::post('/registration',[]);
+});
