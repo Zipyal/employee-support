@@ -1,50 +1,53 @@
+@php
+    /** @var \App\Models\Test[]|\Illuminate\Database\Eloquent\Collection $test */
+@endphp
 @extends('layout.main')
+@section('title')Тесты@endsection
+@section('buttons')
+    <a class="btn btn-sm btn-outline-success" href="{{ route('test-add') }}"><i class="fas fa-plus"></i></a>
+@endsection
 @section('content')
 
-    @php
-        /** @var $test \App\Models\Test[]|\Illuminate\Database\Eloquent\Collection */
-    @endphp
-
-
     <div class="container">
-        <div class="row mt-2 mb-5">
-            <div class="col">
-                <h1>Тесты</h1>
-            </div>
-            <div class="col text-end">
-                <a class="btn btn-sm btn-success" href="{{ route('test-add') }}"><strong
-                        class="fs-1 m-0 lh-1">+</strong></a>
-            </div>
-        </div>
+        @if($tests->isNotEmpty())
+            <table class="table table-hover mt-5">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Категория</th>
+                    <th scope="col">Тема</th>
+                    <th scope="col">Вопросов</th>
+                    <th scope="col">Добавлено</th>
+                    <th scope="col">Обновлено</th>
+                    <th scope="col">Автор</th>
+                    <th scope="col" class="text-end">Действия</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach($tests as $test)
+                    <tr>
+                        <td>{{ $loop->index+1 }}</td>
+                        <td>{{ $test->category }}</td>
+                        <td>{{ $test->subject }}</td>
+                        <td>{{ $test->questions?->count() }}</td>
+                        <td>{{ $test->created_at }}</td>
+                        <td>{{ $test->updated_at }}</td>
+                        <td>{{ $test->author?->fullName }}</td>
+                        <td class="text-end">
+                            <a class="btn btn-sm btn-outline-dark" href="{{ route('test-show', ['id' => $test]) }}"><i class="far fa-eye"></i></a>
+                            <a class="btn btn-sm btn-outline-dark" href="{{ route('test-edit', ['id' => $test]) }}"><i class="fas fa-pencil-alt"></i></a>
+                            <form method="post" class="d-inline" action="{{ route('test-delete', ['id' => $test]) }}" onSubmit="if(!confirm('Вы действительно хотите удалить?')){return false;}">
+                                @csrf
+                                <button type="submit" class="btn btn-sm btn-danger"><i class="fas fa-trash-alt"></i></button>
+                            </form>
+                        </td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+        @else
+            <div class="text-muted">Данные отсутствуют.</div>
+        @endif
     </div>
 
-    <table class="table table-hover">
-        <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Объект</th>
-            <th scope="col">Категория</th>
-            <th scope="col">Текст</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach($tests as $i => $test)
-            <tr>
-                <td>{{ $i+1 }}</td>
-                <td>{{ $test->subject }}</td>
-                <td>{{ $test->category }}</td>
-                <td>{{ $test->text }}</td>
-                <td>
-                    <a class="btn btn-sm btn-outline-dark"
-                       href="{{ route('test-show', ['id' => $test]) }}">👁</a>
-                    <a class="btn btn-sm btn-outline-dark"
-                       href="{{ route('test-edit', ['id' => $test]) }}">✎</a>
-                    <form method="post" class="d-inline" action="{{ route('test-delete', ['id' => $test]) }}"
-                          onSubmit="if(!confirm('Вы действительно хотите удалить?')){return false;}">@csrf <input
-                            type="submit" class="btn btn-sm btn-danger" value="🗑"></form>
-                </td>
-            </tr>
-        @endforeach
-        </tbody>
-    </table>
 @endsection

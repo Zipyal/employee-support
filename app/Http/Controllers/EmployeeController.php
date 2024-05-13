@@ -15,8 +15,6 @@ class EmployeeController extends Controller
         'role' => 'required',
         'email' => 'required|email',
         'birth_date' => 'required|date:Y-m-d',
-        'position' => 'required',
-        'department' => 'required',
         'education' => 'required',
         'add_education' => 'nullable',
         'experience' => 'required|integer',
@@ -56,8 +54,6 @@ class EmployeeController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate(self::VALIDATION_RULES);
-
-
         Employee::query()->create($validated);
 
         return redirect()->route('employee');
@@ -77,16 +73,16 @@ class EmployeeController extends Controller
         $employee = Employee::query()->findOrFail($id);
         $validated = $request->validate(self::VALIDATION_RULES);
         $employee->update($validated);
+
         return redirect()->route('employee');
     }
 
-    public function delete($id)
+    public function delete(string $id)
     {
         /** @var Employee $employee */
         $employee = Employee::query()->findOrFail($id);
         $employee->delete();
+
         return redirect()->route('employee');
     }
 }
-
-

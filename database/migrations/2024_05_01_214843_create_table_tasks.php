@@ -14,7 +14,8 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create(self::TABLE_NAME, function (Blueprint $table) {
-            $table->uuid()->primary();
+            $table->id()->autoIncrement();
+            $table->string('subject');
             $table->enum('status', [
                 'Новая',
                 'В работе',
@@ -29,16 +30,18 @@ return new class extends Migration {
                 'Проектирование',
                 'Инфраструктура',
                 'Техподдержка',
-            ])->comment('Тип статуса');
+            ])->comment('Тип');
             $table->date('start_date')->comment('Планируемая дата начала');
-            $table->date('end_date')->comment('Планируемая дата завершения');
+            $table->date('end_date')->nullable()->comment('Планируемая дата завершения');
             $table->text('description')->comment('Описание');
-            $table->timestamps();
 
-            $table->foreignUuid('employee_uuid')->nullable()->references('uuid')->on('employees')->onDelete('set null');
-            $table->foreignUuid('test_uuid')->nullable()->references('uuid')->on('tests')->onDelete('set null');
-            $table->foreignUuid('briefing_uuid')->nullable()->references('uuid')->on('briefings')->onDelete('set null');
-            $table->foreignUuid('material_uuid')->nullable()->references('uuid')->on('materials')->onDelete('set null');
+            $table->foreignUuid('author_uuid')->nullable()->references('uuid')->on('employees')->onDelete('no action');
+            $table->foreignUuid('employee_uuid')->nullable()->references('uuid')->on('employees')->onDelete('no action');
+            $table->foreignUuid('test_uuid')->nullable()->references('uuid')->on('tests')->onDelete('no action');
+            $table->foreignUuid('briefing_uuid')->nullable()->references('uuid')->on('briefings')->onDelete('no action');
+            $table->foreignUuid('material_uuid')->nullable()->references('uuid')->on('materials')->onDelete('no action');
+
+            $table->timestamps();
         });
     }
 

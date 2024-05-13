@@ -2,25 +2,31 @@
 
 namespace App\Models;
 
+use Carbon\Traits\Date;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Carbon;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Class Task
  * @package App\Models
  *
+ * @property string $subject
  * @property string $status
  * @property string $type
- * @property Carbon $start_date
- * @property Carbon $end_date
+ * @property Date $start_date
+ * @property Date $end_date
  * @property string $description
  *
+ * @property Employee $author
  * @property Employee $employee
  * @property Material $material
  * @property Test $test
  * @property Briefing $briefing
+ * @property TaskComment[]|Collection $comments
  */
 class Task extends Model
 {
@@ -44,10 +50,15 @@ class Task extends Model
     ];
 
     protected $guarded = [
-        'uuid',
+        'id',
         'created_at',
         'updated_at',
     ];
+
+    public function author(): BelongsTo
+    {
+        return $this->belongsTo(Employee::class, 'author_uuid', 'uuid');
+    }
 
     public function employee(): BelongsTo
     {
@@ -67,6 +78,11 @@ class Task extends Model
     public function briefing(): BelongsTo
     {
         return $this->belongsTo(Briefing::class, 'briefing_uuid', 'uuid');
+    }
+
+    public function comments(): HasMany
+    {
+        return $this->hasMany(TaskComment::class)->orderBy('created_at');
     }
 }
 

@@ -1,50 +1,94 @@
 @extends('layout.main')
+@section('title')Задачи@endsection
+@section('buttons')
+    <a class="btn btn-sm btn-outline-success" href="{{ route('task-add') }}"><i class="fas fa-plus"></i></a>
+@endsection
+@section('filter')
+    <div class="col-12 col-sm-3">
+        <label class="text-muted" for="filter-subject">Тема: </label>
+        <input id="filter-subject" class="form-control" name="subject" type="text" onchange="this.form.submit()" value="{{ request('subject') }}">
+    </div>
+    <div class="col-12 col-sm-2">
+        <label class="text-muted" for="filter-status">Статус: </label>
+        <select id="filter-status" class="form-control form-select" name="status" onchange="this.form.submit()">
+            <option value="">- не выбрано -</option>
+            @foreach($statuses as $status)
+                <option value="{{ $status }}" {{ request('status') != $status ?: 'selected' }}>{{ $status }}</option>
+            @endforeach
+        </select>
+    </div>
+    <div class="col-12 col-sm-2">
+        <label class="text-muted" for="filter-type">Тип: </label>
+        <select id="filter-type" class="form-control form-select" name="type" onchange="this.form.submit()">
+            <option value="">- не выбрано -</option>
+            @foreach($types as $type)
+                <option value="{{ $type }}" {{ request('type') != $type ?: 'selected' }}>{{ $type }}</option>
+            @endforeach
+        </select>
+    </div>
+    <div class="col-12 col-sm-3">
+        <label class="text-muted" for="filter-employee">Назначена: </label>
+        <select id="filter-employee" class="form-control form-select" name="employee" onchange="this.form.submit()">
+            <option value="">- не выбрано -</option>
+            @foreach($employees as $uuid => $name)
+                <option value="{{ $uuid }}" {{ request('employee') != $uuid ?: 'selected' }}>{{ $name }}</option>
+            @endforeach
+        </select>
+    </div>
+@endsection
 @section('content')
 
     @php
-        /** @var $task \App\Models\Task[]|\Illuminate\Database\Eloquent\Collection */
+        /** @var $tasks \App\Models\Task[]|\Illuminate\Database\Eloquent\Collection */
     @endphp
 
-
     <div class="container">
-        <div class="row mt-2 mb-5">
-            <div class="col">
-                <h1>Инструктажи</h1>
-            </div>
-            <div class="col text-end">
-                <a class="btn btn-sm btn-success" href="{{ route('task-add') }}"><strong
-                        class="fs-1 m-0 lh-1">+</strong></a>
-            </div>
-        </div>
-    </div>
-
-    <table class="table table-hover">
-        <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Объект</th>
-            <th scope="col">Категория</th>
-            <th scope="col">Текст</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach($tasks as $i => $task)
+        @if($tasks->isNotEmpty())
+        <table class="table table-hover mt-5">
+            <thead>
             <tr>
-                <td>{{ $i+1 }}</td>
-                <td>{{ $task->subject . ' ' . $task->first_name . ' ' . $task->patronymic }}</td>
-                <td>{{ $task->category }}</td>
-                <td>{{ $task->text }}</td>
-                <td>
-                    <a class="btn btn-sm btn-outline-dark"
-                       href="{{ route('task-show', ['id' => $task]) }}">👁</a>
-                    <a class="btn btn-sm btn-outline-dark"
-                       href="{{ route('task-edit', ['id' => $task]) }}">✎</a>
-                    <form method="post" class="d-inline" action="{{ route('task-delete', ['id' => $task]) }}"
-                          onSubmit="if(!confirm('Вы действительно хотите удалить?')){return false;}">@csrf <input
-                            type="submit" class="btn btn-sm btn-danger" value="🗑"></form>
-                </td>
+                <th scope="col">ID</th>
+                <th scope="col">Тема</th>
+                <th scope="col">Статус</th>
+                <th scope="col">Тип</th>
+                <th scope="col">Дата начала</th>
+                <th scope="col">Дата окончания</th>
+                <th scope="col">Назначена</th>
+                {{--<th scope="col">Описание</th>--}}
+                <th scope="col">Добавлено</th>
+                <th scope="col">Обновлено</th>
+                <th scope="col">Автор</th>
+                <th scope="col" class="text-end">Действия</th>
             </tr>
-        @endforeach
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+            @foreach($tasks as $task)
+                <tr>
+                    <td>{{ $task->id }}</td>
+                    <td>{{ $task->subject }}</td>
+                    <td>{{ $task->status }}</td>
+                    <td>{{ $task->type }}</td>
+                    <td>{{ $task->start_date }}</td>
+                    <td>{{ $task->end_date }}</td>
+                    <td>{{ $task->employee?->fullName }}</td>
+                    <td>{{ $task->created_at }}</td>
+                    <td>{{ $task->updated_at }}</td>
+                    <td>{{ $task->author?->fullName }}</td>
+                    {{--<td>{{ $task->description }}</td>--}}
+                    <td class="text-end">
+                        <a class="btn btn-sm btn-outline-dark" href="{{ route('task-show', ['id' => $task]) }}"><i class="far fa-eye"></i></a>
+                        <a class="btn btn-sm btn-outline-dark" href="{{ route('task-edit', ['id' => $task]) }}"><i class="fas fa-pencil-alt"></i></a>
+                        <form method="post" class="d-inline" action="{{ route('task-delete', ['id' => $task]) }}" onSubmit="if(!confirm('Вы действительно хотите удалить?')){return false;}">
+                            @csrf
+                            <button type="submit" class="btn btn-sm btn-danger"><i class="fas fa-trash-alt"></i></button>
+                        </form>
+                    </td>
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
+        @else
+            <div class="text-muted">Данные отсутствуют.</div>
+        @endif
+    </div>
 @endsection

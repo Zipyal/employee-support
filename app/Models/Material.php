@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $category
  * @property string $text
  *
- * @property Mentor $mentor
+ * @property Employee $author
  * @property Task[]|Collection $tasks
  */
 class Material extends Model
@@ -25,19 +25,22 @@ class Material extends Model
     use HasFactory;
     use HasUuids;
 
+    public $incrementing = false;
+    protected $primaryKey = 'uuid';
+
     protected $guarded = [
         'uuid',
         'created_at',
         'updated_at',
     ];
 
-    public function mentor(): BelongsTo
+    public function author(): BelongsTo
     {
-        return $this->belongsTo(Mentor::class, 'mentor_uuid', 'uuid');
+        return $this->belongsTo(Employee::class, 'author_uuid', 'uuid');
     }
 
     public function tasks(): HasMany
     {
-        return $this->HasMany(Task::class);
+        return $this->hasMany(Task::class);
     }
 }

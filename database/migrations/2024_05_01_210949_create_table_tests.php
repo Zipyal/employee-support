@@ -17,8 +17,8 @@ return new class extends Migration
         Schema::create(self::TABLE_NAME, function (Blueprint $table) {
             $table->uuid()->primary();
             $table->string('category')->comment('Категория');
-            $table->string('subject')->comment('Объект');
-            $table->string('url')->comment('Ссылка');
+            $table->string('subject')->comment('Тема');
+            $table->foreignUuid('author_uuid')->nullable()->references('uuid')->on('employees')->onDelete('set null');
             $table->timestamps();
         });
     }

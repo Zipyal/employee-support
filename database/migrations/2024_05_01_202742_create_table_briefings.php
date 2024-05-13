@@ -15,8 +15,9 @@ return new class extends Migration {
     {
         Schema::create(self::TABLE_NAME, function (Blueprint $table) {
             $table->uuid()->primary();
-            $table->string('subject')->comment('Объект');
+            $table->string('subject')->comment('Тема');
             $table->text('text')->comment('Текст');
+            $table->foreignUuid('author_uuid')->nullable()->references('uuid')->on('employees')->onDelete('set null');
             $table->timestamps();
         });
     }

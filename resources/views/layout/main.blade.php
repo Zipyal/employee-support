@@ -3,49 +3,44 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap demo</title>
+    <title>Employee Support</title>
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('libs/fontawesome/css/all.min.css') }}" rel="stylesheet">
     <script src="{{ asset('js/bootstrap.bundle.min.js') }}" defer></script>
+    <script src="{{ asset('libs/fontawesome/js/all.min.js') }}" defer></script>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg bg-light">
-        <div class="container-fluid">
-{{--            <a class="navbar-brand" href="#">Navbar</a>--}}
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Лента</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('briefing') }}">Инструктажы</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('material') }}">Материалы</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('test') }}">Тестирования</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Задания
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Список</a></li>
-                            <li><a class="dropdown-item" href="#">Добавить</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('employee') }}">Сотрудники</a>
-                    </li>
-                </ul>
+    @include('layout.nav')
+
+    <div class="container">
+        <div class="row my-3">
+            <div class="col">
+                <h1>@yield('title')</h1>
+                <h2>@yield('subtitle')</h2>
             </div>
+            @hasSection('buttons')
+            <div class="col text-end btn-group-lg">
+                @yield('buttons')
+            </div>
+            @endif
         </div>
-    </nav>
-<div class="container-fluid">
-    @yield('content')
-</div>
+    </div>
+
+    @hasSection('filter')
+    <div class="container p-3 mb-3 bg-light">
+        <form method="get" action="{{ url()->current() }}" class="row">
+            @yield('filter')
+            <div class="col mt-auto text-end">
+                <a class="btn btn-sm btn-outline-dark d-inline-block position-relative py-2 px-4" href="{{ url()->current() }}" title="Сбросить фильтр">
+                    <span class="fa-stack fa-stack-2x small"><i class="fas fa-filter fa-stack-1x" style="scale: 0.8;"></i><i class="fas fa-times fa-stack-1x text-danger" style="scale: 1.2; padding-left:14px;padding-top:14px;"></i></span>&nbsp;
+                </a>
+            </div>
+        </form>
+    </div>
+    @endif
+
+    <div class="container-fluid">
+        @yield('content')
+    </div>
 </body>
 </html>

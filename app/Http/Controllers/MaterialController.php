@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Employee;
 use App\Models\Material;
 use Illuminate\Http\Request;
 
@@ -12,7 +11,7 @@ class MaterialController extends Controller
         'subject' => 'required',
         'category' => 'required',
         'text' => 'required',
-        'mentor_uuid' => 'required|exists:employees,uuid',
+        'author_uuid' => 'nullable|exists:employees,uuid',
     ];
 
     public function index(Request $request)
@@ -42,8 +41,6 @@ class MaterialController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate(self::VALIDATION_RULES);
-
-
         Material::query()->create($validated);
 
         return redirect()->route('material');

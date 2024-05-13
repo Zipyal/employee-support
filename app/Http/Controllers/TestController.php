@@ -2,24 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Employee;
 use App\Models\Test;
 use Illuminate\Http\Request;
 
 class TestController extends Controller
 {
     const VALIDATION_RULES = [
-        'subject' => 'required',
         'category' => 'required',
-        'url' => 'required',
+        'subject' => 'required',
     ];
 
     public function index(Request $request)
     {
-        $tests = Test::query()->get();
-
         return view('test.index', [
-            'tests' => $tests,
+            'tests' => Test::query()->get(),
         ]);
     }
 

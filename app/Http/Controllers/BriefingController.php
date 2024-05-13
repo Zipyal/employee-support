@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Employee;
 use App\Models\Briefing;
 use Illuminate\Http\Request;
 
@@ -11,6 +10,7 @@ class BriefingController extends Controller
     const VALIDATION_RULES = [
         'subject' => 'required',
         'text' => 'required',
+        'author_uuid' => 'nullable|exists:employees,uuid',
     ];
 
     public function index(Request $request)
@@ -40,8 +40,6 @@ class BriefingController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate(self::VALIDATION_RULES);
-
-
         Briefing::query()->create($validated);
 
         return redirect()->route('briefing');

@@ -1,37 +1,110 @@
+@php
+    /** @var $task \App\Models\Task */
+@endphp
 @extends('layout.main')
+@section('title')Задача {{ $task->id .': '. $task->subject }}@endsection
+@section('buttons')
+    <a class="btn btn-outline-dark" href="{{ route('task-edit', ['id' => $task]) }}"><i class="fas fa-pencil-alt"></i></a>
+    <form method="post" class="d-inline" action="{{ route('task-delete', ['id' => $task]) }}"
+          onSubmit="if(!confirm('Вы действительно хотите удалить?')){return false;}">
+        @csrf
+        <button type="submit" class="btn btn-lg btn-danger"><i class="fas fa-trash-alt"></i></button>
+    </form>
+@endsection
 @section('content')
 
-    @php
-        /** @var $task \App\Models\Task */
-    @endphp
+    <div class="container">
+        <div class="row py-2 bg-light">
+            <div class="col-12 col-md-4 mb-2">
+                <div class="text-muted fw-light">Статус</div>
+                <div>{{ $task->status }}</div>
+            </div>
 
-    <div class="row">
-        <div class="col">
-            <h1>{{ $task->subject }}</h1>
+            <div class="col-12 col-md-4 mb-2">
+                <div class="text-muted fw-light">Тип</div>
+                <div>{{ $task->type }}</div>
+            </div>
+
+            <div class="col-12 col-md-4 mb-2">
+                <div class="text-muted fw-light">Назначена</div>
+                <div>{{ $task->employee?->fullName }}</div>
+            </div>
+
+            <div class="col-12 col-md-4 mb-2">
+                <div class="text-muted fw-light">Планируемая дата начала</div>
+                <div>{{ $task->start_date }}</div>
+            </div>
+
+            <div class="col-12 col-md-4 mb-2">
+                <div class="text-muted fw-light">Планируемая дата завершения</div>
+                <div>{{ $task->end_date }}</div>
+            </div>
+
+            <div class="col-12 col-md-4 mb-2"></div>
+
+            <div class="col-12 col-md-4 mb-2">
+                <div class="text-muted fw-light">Добавлено: </div>
+                <div>{{ $task->created_at }}</div>
+            </div>
+
+            <div class="col-12 col-md-4 mb-2">
+                <div class="text-muted fw-light">Обновлено: </div>
+                <div>@if($task->created_at != $task->updated_at) {{ $task->updated_at }} @endif</div>
+            </div>
+
+            <div class="col-12 col-md-4 mb-2">
+                <div class="text-muted fw-light">Автор: </div>
+                <div>{{ $task->author?->fullName }}</div>
+            </div>
         </div>
-        <div class="col text-end">
-            <a class="btn btn-sm btn-outline-dark" href="{{ route('task-edit', ['id' => $task]) }}">✎</a>
-            <form method="post" class="d-inline" action="{{ route('task-delete', ['id' => $task]) }}"
-                  onSubmit="if(!confirm('Вы действительно хотите удалить?')){return false;}">@csrf <input
-                    type="submit" class="btn btn-sm btn-danger" value="🗑"></form>
+
+        <div class="row mb-4 py-2">
+            <div class="col-12 my-5">
+                <div class="text-muted fw-light">Описание</div>
+                <div>{!! nl2br($task->description) !!}</div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-12 h5">Комментарии</div>
+            @if($task->comments->isNotEmpty())
+                <div class="row">
+                    @foreach($task->comments as $comment)
+                    <div class="col-12 mb-3 py-3 shadow-sm">
+                        <div class="comment-info" style="color: #@php echo substr(dechex(crc32($comment->author_uuid ?? 'unknown')), 0, 6); @endphp">
+                            <div class="comment-author"><i class="far fa-user-circle"></i> {{ $comment->author ? $comment->author->fullName : 'Неизвестный' }}</div>
+                            <div class="comment-dt"><i class="far fa-clock"></i> {{ $comment->updated_at }}</div>
+                        </div>
+                        <div class="comment-text mt-3 text-dark">{!! nl2br($comment->text) !!}</div>
+                    </div>
+                    @endforeach
+                </div>
+            @else
+                <div class="col-12 text-muted">Комментариев пока нет.</div>
+            @endif
+            <div class="col-12 mt-5 bg-light py-3">
+                <form class="row" method="post" action="{{ route('task-add-comment') }}">
+                    @csrf
+                    <input type="hidden" name="task_id" value="{{ $task->id }}">
+                    <input type="hidden" name="author_uuid" value="{{ Auth::user()?->id }}">
+                    <div class="col-12">
+                        <label for="comment-text">Ваш комментарий:</label>
+                        <textarea class="form-control" name="text" id="comment-text"></textarea>
+                    </div>
+                    <script>
+                        document.querySelector('#comment-text').addEventListener('keydown', function (e) {
+                            // console.log(e);
+                            if (e.ctrlKey && e.keyCode === 13) {
+                                this.form.submit();
+                            }
+                        });
+                    </script>
+                    <div class="col-12 mt-3">
+                        <button type="submit" class="btn btn-sm btn-outline-success">Отправить <i class="fas fa-paper-plane" style="rotate: 45deg"></i></button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-
-
-
-    <table class="table table-hover">
-        <tr>
-            <th>Объект</th>
-            <td>{{ $task->subject }}</td>
-        </tr>
-        <tr>
-            <th>Категория</th>
-            <td>{{ $task->category }}</td>
-        </tr>
-        <tr>
-            <th>Текст</th>
-            <td>{{ $task->text }}</td>
-        </tr>
-    </table>
 
 @endsection
