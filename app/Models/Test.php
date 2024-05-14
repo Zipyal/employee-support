@@ -22,7 +22,7 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
  * @property TestQuestion[]|Collection $questions
  * @property Task[]|Collection $tasks
  */
-class Test extends Model
+class Test extends BaseModel
 {
     use HasFactory;
     use HasUuids;

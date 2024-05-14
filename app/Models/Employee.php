@@ -32,7 +32,7 @@ use Illuminate\Database\Eloquent\Collection;
  * @property Material[]|Collection $materials
  * @property Task[]|Collection $tasks
  */
-class Employee extends Model
+class Employee extends BaseModel
 {
     use HasFactory;
     use HasUuids;

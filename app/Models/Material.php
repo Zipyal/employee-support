@@ -20,7 +20,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property Employee $author
  * @property Task[]|Collection $tasks
  */
-class Material extends Model
+class Material extends BaseModel
 {
     use HasFactory;
     use HasUuids;

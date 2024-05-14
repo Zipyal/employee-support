@@ -28,7 +28,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property Briefing $briefing
  * @property TaskComment[]|Collection $comments
  */
-class Task extends Model
+class Task extends BaseModel
 {
     use HasFactory;
 

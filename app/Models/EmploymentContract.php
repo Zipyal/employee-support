@@ -24,7 +24,7 @@ use Illuminate\Support\Carbon;
  *
  * @property Employee $employee
  */
-class EmploymentContract extends Model
+class EmploymentContract extends BaseModel
 {
     use HasFactory;
     use HasUuids;
