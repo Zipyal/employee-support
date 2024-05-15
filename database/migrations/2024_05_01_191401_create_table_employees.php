@@ -30,6 +30,7 @@ return new class extends Migration {
                 'Администратор',
             ])->nullable()->comment('Роль');
             $table->uuid('mentor_uuid')->nullable();
+            $table->foreignId('user_id')->nullable()->references('id')->on('users')->onDelete('set null')->onUpdate('set null');
             $table->timestamps();
         });
 

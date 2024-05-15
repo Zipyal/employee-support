@@ -9,5 +9,5 @@ class BaseModel extends Model
 {
     use HasFactory;
 
-    protected $dateFormat = 'd-m-Y H:i:s';
+    protected $dateFormat = 'Y-m-d H:i:s';
 }

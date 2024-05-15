@@ -25,10 +25,6 @@
                 <td>{{ $employee->phone }}</td>
             </tr>
             <tr>
-                <th>Эл. почта</th>
-                <td>{{ $employee->email }}</td>
-            </tr>
-            <tr>
                 <th>Дата рождения</th>
                 <td>{{ $employee->birth_date }}</td>
             </tr>
@@ -45,16 +41,28 @@
                 <td>{{ $employee->experience }}</td>
             </tr>
             <tr>
+                <th>Учётная запись</th>
+                <td>
+                    @if(null === $employee->user_id)
+                        <span class="badge text-bg-secondary"><i class="fas fa-minus"></i> не создана</span>
+                    @elseif(null !== $employee->user->banned_at)
+                        <span class="badge text-bg-danger"><i class="fas fa-ban"></i> заблокирована</span>
+                    @else
+                        <span class="badge text-bg-success"><i class="fas fa-check"></i> активна</span>
+                    @endif
+                </td>
+            </tr>
+            <tr>
+                <th>Эл. почта</th>
+                <td>{{ $employee->email }}</td>
+            </tr>
+            <tr>
+                <th>Логин</th>
+                <td>{{ $employee->user?->name }}</td>
+            </tr>
+            <tr>
                 <th>Роль</th>
                 <td>{{ $employee->role }}</td>
-            </tr>
-            <tr>
-                <th>Должность</th>
-                <td>{{ $employee->lastContract()?->position }}</td>
-            </tr>
-            <tr>
-                <th>Отдел</th>
-                <td>{{ $employee->lastContract()?->department }}</td>
             </tr>
         </table>
 

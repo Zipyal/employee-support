@@ -32,6 +32,22 @@
                        href="{{ route('employee') }}"><i class="fas fa-users"></i> Сотрудники</a>
                 </li>
             </ul>
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 profile-menu">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle @if(Route::is('user*')) active text-bg-primary @endif" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user"></i> {{ auth()->user()->name }}
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <li class="@if(Route::is('user*')) active @endif">
+                            <a class="dropdown-item @if(Route::is('user*')) text-bg-primary @endif" href="{{ route('user-profile') }}"><i class="fas fa-user-circle"></i> Профиль</a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item" href="{{ route('logout') }}"><i class="fas fa-sign-out-alt"></i> Выход</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
         </div>
     </div>
 </nav>

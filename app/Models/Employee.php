@@ -2,13 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
-use Illuminate\Database\Eloquent\Collection;
 
 /**
  * Class Employee
@@ -26,11 +25,13 @@ use Illuminate\Database\Eloquent\Collection;
  * @property string $add_education
  * @property string $experience
  * @property string $role
+ * @property string $user_id
  *
  * @property Employee $mentor
  * @property EmploymentContract[]|Collection $contracts
  * @property Material[]|Collection $materials
  * @property Task[]|Collection $tasks
+ * @property User $user
  */
 class Employee extends BaseModel
 {
@@ -52,6 +53,16 @@ class Employee extends BaseModel
         'updated_at',
     ];
 
+    public function getFullNameAttribute(): string
+    {
+        $fullName = [];
+        $fullName[] = $this->last_name;
+        $fullName[] = $this->first_name;
+        if ($this->patronymic) {
+            $fullName[] = $this->patronymic;
+        }
+        return implode(' ', $fullName);
+    }
 
     public function mentor(): BelongsTo
     {
@@ -61,6 +72,15 @@ class Employee extends BaseModel
     public function contracts(): HasMany
     {
         return $this->hasMany(EmploymentContract::class)->orderBy('register_date', 'desc');
+    }
+
+    public function lastContract()
+    {
+        if ($this->contracts->isEmpty()) {
+            return null;
+        }
+
+        return $this->contracts->first();
     }
 
     public function tasks(): HasMany
@@ -73,23 +93,8 @@ class Employee extends BaseModel
         return $this->hasMany(material::class);
     }
 
-    public function getFullNameAttribute(): string
+    public function user(): BelongsTo
     {
-        $fullName = [];
-        $fullName[] = $this->last_name;
-        $fullName[] = $this->first_name;
-        if ($this->patronymic) {
-            $fullName[] = $this->patronymic;
-        }
-        return implode(' ', $fullName);
-    }
-
-    public function lastContract()
-    {
-        if ($this->contracts->isEmpty()) {
-            return null;
-        }
-
-        return $this->contracts->first();
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 }

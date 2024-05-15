@@ -3,15 +3,28 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+/**
+ * Class Briefing
+ * @package App\Models
+ *
+ * @property string $name
+ * @property string $email
+ * @property Carbon $email_verified_at
+ * @property Carbon $banned_at
+ *
+ * @property Employee $employee
+ */
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    protected $dateFormat = 'd-m-Y H:i:s';
+    protected $dateFormat = 'Y-m-d H:i:s';
 
     /**
      * The attributes that are mass assignable.
@@ -43,7 +56,13 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
+            'banned_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function user(): HasOne
+    {
+        return $this->hasOne(Employee::class);
     }
 }

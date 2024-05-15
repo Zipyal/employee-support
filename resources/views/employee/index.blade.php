@@ -29,12 +29,13 @@
                 <th scope="col">Телефон</th>
                 <th scope="col">Эл. почта</th>
                 <th scope="col">Дата рождения</th>
-                <th scope="col">Роль</th>
                 <th scope="col">Должность</th>
                 <th scope="col">Отдел</th>
                 <th scope="col">Образование</th>
                 <th scope="col">Доп. образование</th>
                 <th scope="col">Опыт работы</th>
+                <th scope="col">Учётная запись</th>
+                <th scope="col">Роль</th>
                 <th scope="col" class="text-end">Действия</th>
             </tr>
             </thead>
@@ -46,12 +47,21 @@
                     <td>{{ $employee->phone }}</td>
                     <td>{{ $employee->email }}</td>
                     <td>{{ $employee->birth_date }}</td>
-                    <td>{{ $employee->role }}</td>
                     <td>{{ $employee->lastContract()?->position }}</td>
                     <td>{{ $employee->lastContract()?->department }}</td>
                     <td>{{ $employee->education }}</td>
                     <td>{{ $employee->add_education }}</td>
                     <td>{{ $employee->experience }}</td>
+                    <td>
+                        @if(null === $employee->user_id)
+                            <i class="fas fa-minus text-dark"></i>
+                        @elseif(null !== $employee->user->banned_at)
+                            <i class="fas fa-ban text-danger"></i>
+                        @else
+                            <i class="fas fa-check text-success"></i>
+                        @endif
+                    </td>
+                    <td>{{ $employee->role }}</td>
                     <td class="text-end">
                         <a class="btn btn-sm btn-outline-dark" href="{{ route('employee-show', ['id' => $employee]) }}"><i class="far fa-eye"></i></a>
                         <a class="btn btn-sm btn-outline-dark" href="{{ route('employee-edit', ['id' => $employee]) }}"><i class="fas fa-pencil-alt"></i></a>

@@ -65,20 +65,20 @@
             </div>
 
             <div class="col-12 col-md-4">
-                <label for="email" class="form-label">Почта</label>
+                <label for="birth_date" class="form-label">Дата рождения</label>
                 <div class="input-group has-validation">
-                    <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email') ?? $employee->email }}">
-                    @error('email')
+                    <input type="date" class="form-control @error('birth_date') is-invalid @enderror" id="birth_date" name="birth_date" value="{{ old('birth_date') ?? $employee->birth_date }}">
+                    @error('birth_date')
                     <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
             </div>
 
             <div class="col-12 col-md-4">
-                <label for="birth_date" class="form-label">Дата рождения</label>
+                <label for="experience" class="form-label">Опыт работы</label>
                 <div class="input-group has-validation">
-                    <input type="date" class="form-control @error('birth_date') is-invalid @enderror" id="birth_date" name="birth_date" value="{{ old('birth_date') ?? $employee->birth_date }}">
-                    @error('birth_date')
+                    <input type="number" class="form-control @error('experience') is-invalid @enderror" id="experience" name="experience" value="{{ old('experience') ?? $employee->experience }}">
+                    @error('experience')
                     <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
@@ -104,31 +104,77 @@
                 </div>
             </div>
 
-            <div class="col-12 col-md-4">
-                <label for="experience" class="form-label">Опыт работы</label>
-                <div class="input-group has-validation">
-                    <input type="number" class="form-control @error('experience') is-invalid @enderror" id="experience" name="experience" value="{{ old('experience') ?? $employee->experience }}">
-                    @error('experience')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-            </div>
+            <div class="col-12">
+                <fieldset class="border rounded-3 px-3 pb-3 bg-light">
+                    <legend class="float-none w-auto px-1 small text-muted">Учётная запись</legend>
+                    <div class="row">
 
-            <div class="col-12 col-md-4">
-                <label for="role" class="form-label">Роль</label>
-                <div class="input-group has-validation">
-                    <select id="role" name="role" class="form-select @error('role') is-invalid @enderror">
-                        <option value=""> - Не выбрано -</option>
-                        @foreach ($roles as $role)
-                            <option value="{{ $role }}" {{ (old('role') ?? $employee->role) == $role ? 'selected' : '' }}>
-                                {{ $role }}
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('role')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
+                        <div class="col-12 col-md-6 col-lg-3 mb-3">
+                            <label for="role" class="form-label">Роль</label>
+                            <div class="input-group has-validation">
+                                <select id="role" name="role" class="form-select @error('role') is-invalid @enderror">
+                                    <option value=""> - Не выбрано -</option>
+                                    @foreach ($roles as $role)
+                                        <option value="{{ $role }}" {{ (old('role') ?? $employee->role) == $role ? 'selected' : '' }}>
+                                            {{ $role }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('role')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-6 col-lg-3 mb-3">
+                            <label for="username" class="form-label">Логин</label>
+                            <div class="input-group has-validation">
+                                <input type="text" class="form-control @error('username') is-invalid @enderror" id="username" name="username" value="{{ old('username') ?? $employee->user?->name }}">
+                                @error('username')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-6 col-lg-3 mb-3">
+                            <label for="email" class="form-label">Почта</label>
+                            <div class="input-group has-validation">
+                                <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email') ?? $employee->email }}">
+                                @error('email')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-6 col-lg-3">
+                            <label for="password" class="form-label">Пароль</label>
+                            <div class="input-group has-validation">
+                                <div class="input-group">
+                                    <input type="search" class="form-control font-monospace @error('password') is-invalid @enderror" id="password" name="password" value="{{ old('password') }}">
+                                    <button class="btn btn-outline-primary" type="button" id="btn-generate-password"><i class="fas fa-dice text-bg-white"></i></button>
+                                    <script>
+                                        let inputPassword = document.querySelector('#password');
+                                        let btnGenPass = document.querySelector('#btn-generate-password');
+                                        btnGenPass.addEventListener('click', function () {
+                                            inputPassword.value = (Math.random() + 1).toString(36).substring(2);
+                                        });
+                                    </script>
+                                </div>
+                                @error('password')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                                <div id="password-help" class="form-text">Оставьте пустым если не желаете менять</div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-6 col-lg-2 text-end pt-4">
+                            <div class="form-check form-switch text-start">
+                                <label class="form-check-label" for="ban">Заблокировать</label>
+                                <input class="form-check-input" type="checkbox" id="ban" name="ban" @if(old('banned_at') || (old('banned_at') === null && $employee->user?->banned_at !== null)) checked @endif>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
             </div>
 
             <div class="col-12 mt-5">
