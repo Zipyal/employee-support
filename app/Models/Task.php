@@ -20,8 +20,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property Date $start_date
  * @property Date $end_date
  * @property string $description
+ * @property string $employee_uuid
+ * @property string $test_uuid
+ * @property string $briefing_uuid
+ * @property string $material_uuid
  *
- * @property Employee $author
+ * @property User $author
  * @property Employee $employee
  * @property Material $material
  * @property Test $test
@@ -57,7 +61,7 @@ class Task extends BaseModel
 
     public function author(): BelongsTo
     {
-        return $this->belongsTo(Employee::class, 'author_uuid', 'uuid');
+        return $this->belongsTo(User::class, 'author_id', 'id');
     }
 
     public function employee(): BelongsTo

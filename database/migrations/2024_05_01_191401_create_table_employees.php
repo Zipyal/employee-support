@@ -24,13 +24,8 @@ return new class extends Migration {
             $table->string('education')->comment('Оброзование');
             $table->string('add_education')->nullable()->comment('Дополнительное образование');
             $table->unsignedSmallInteger('experience')->comment('Опыт работы');
-            $table->enum('role', [
-                'Сотрудник',
-                'Наставник',
-                'Администратор',
-            ])->nullable()->comment('Роль');
-            $table->uuid('mentor_uuid')->nullable();
-            $table->foreignId('user_id')->nullable()->references('id')->on('users')->onDelete('set null')->onUpdate('set null');
+            $table->foreignId('user_id')->nullable()->comment('Ссылка на пользователя (учётная запись)')->references('id')->on('users')->onDelete('set null')->onUpdate('set null');
+            $table->uuid('mentor_uuid')->nullable()->comment('Ссылка на сотрудника (наставник)');
             $table->timestamps();
         });
 

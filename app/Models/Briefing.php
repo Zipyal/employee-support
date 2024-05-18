@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -15,8 +14,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * @property string $subject
  * @property string $text
+ * @property int $author_id
  *
- * @property Employee $author
+ * @property User $author
  * @property Task[]|Collection $tasks
  */
 class Briefing extends BaseModel
@@ -35,7 +35,7 @@ class Briefing extends BaseModel
 
     public function author(): BelongsTo
     {
-        return $this->belongsTo(Employee::class, 'author_uuid', 'id');
+        return $this->belongsTo(User::class, 'author_id', 'id');
     }
 
     public function tasks(): HasMany

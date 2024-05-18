@@ -1,15 +1,18 @@
 @php
+    use App\Models\User;
     /** @var \App\Models\Test $test */
 @endphp
 @extends('layout.main')
 @section('title')Тест: {{ $test->subject }}@endsection
 @section('buttons')
+    @if(in_array(auth()?->user()?->role_id, [User::ROLE_ADMIN, User::ROLE_MENTOR]))
     <a class="btn btn-outline-dark" href="{{ route('test-edit', ['id' => $test]) }}"><i class="fas fa-pencil-alt"></i></a>
     <form method="post" class="d-inline" action="{{ route('test-delete', ['id' => $test]) }}"
           onSubmit="if(!confirm('Вы действительно хотите удалить?')){return false;}">
         @csrf
         <button type="submit" class="btn btn-lg btn-danger"><i class="fas fa-trash-alt"></i></button>
     </form>
+    @endif
 @endsection
 @section('content')
 
@@ -27,7 +30,7 @@
 
             <div class="col-12 col-md-3 mb-2">
                 <div class="text-muted fw-light">Автор: </div>
-                <div>{{ $test->author?->fullName }}</div>
+                <div>{{ $test->author?->employee?->lastFirstName ?? $test->author?->name }}</div>
             </div>
 
             <div class="col-12 col-md-3 mb-2">

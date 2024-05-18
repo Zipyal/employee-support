@@ -18,7 +18,7 @@ return new class extends Migration
             $table->uuid()->primary();
             $table->string('text')->comment('Текст варианта ответа');
             $table->boolean('is_correct')->nullable()->comment('Является ли ответ верным');
-            $table->foreignUuid('test_question_uuid')->references('uuid')->on('test_questions')->onDelete('cascade');
+            $table->foreignUuid('test_question_uuid')->comment('Ссылка на вопрос')->references('uuid')->on('test_questions')->onDelete('cascade');
             $table->timestamps();
         });
     }

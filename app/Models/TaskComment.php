@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $text
  *
  * @property Task $task
- * @property Employee $author
+ * @property User $author
  */
 class TaskComment extends BaseModel
 {
@@ -37,7 +37,7 @@ class TaskComment extends BaseModel
 
     public function author(): BelongsTo
     {
-        return $this->belongsTo(Employee::class, 'author_uuid', 'uuid');
+        return $this->belongsTo(User::class, 'author_id', 'id');
     }
 }
 

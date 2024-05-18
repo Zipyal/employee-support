@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $category
  * @property string $text
  *
- * @property Employee $author
+ * @property User $author
  * @property Task[]|Collection $tasks
  */
 class Material extends BaseModel
@@ -36,7 +36,7 @@ class Material extends BaseModel
 
     public function author(): BelongsTo
     {
-        return $this->belongsTo(Employee::class, 'author_uuid', 'uuid');
+        return $this->belongsTo(User::class, 'author_id', 'id');
     }
 
     public function tasks(): HasMany

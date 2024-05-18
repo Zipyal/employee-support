@@ -27,7 +27,7 @@
 
             <div class="col-12 col-md-3 mb-2">
                 <div class="text-muted fw-light">Автор: </div>
-                <div>{{ $briefing->author?->fullName }}</div>
+                <div>{{ $briefing->author?->employee?->fullName ?? $briefing->author?->name }}</div>
             </div>
         </div>
 

@@ -35,11 +35,11 @@ return new class extends Migration {
             $table->date('end_date')->nullable()->comment('Планируемая дата завершения');
             $table->text('description')->comment('Описание');
 
-            $table->foreignUuid('author_uuid')->nullable()->references('uuid')->on('employees')->onDelete('no action');
-            $table->foreignUuid('employee_uuid')->nullable()->references('uuid')->on('employees')->onDelete('no action');
-            $table->foreignUuid('test_uuid')->nullable()->references('uuid')->on('tests')->onDelete('no action');
-            $table->foreignUuid('briefing_uuid')->nullable()->references('uuid')->on('briefings')->onDelete('no action');
-            $table->foreignUuid('material_uuid')->nullable()->references('uuid')->on('materials')->onDelete('no action');
+            $table->foreignId('author_id')->nullable()->comment('Ссылка на пользователя (автор)')->references('id')->on('users')->onDelete('set null');
+            $table->foreignUuid('employee_uuid')->nullable()->comment('Ссылка на сотрудника (на кого назначено)')->references('uuid')->on('employees')->onDelete('no action');
+            $table->foreignUuid('test_uuid')->nullable()->comment('Ссылка на тест')->references('uuid')->on('tests')->onDelete('no action');
+            $table->foreignUuid('briefing_uuid')->nullable()->comment('Ссылка на инструктаж')->references('uuid')->on('briefings')->onDelete('no action');
+            $table->foreignUuid('material_uuid')->nullable()->comment('Ссылка на материал')->references('uuid')->on('materials')->onDelete('no action');
 
             $table->timestamps();
         });

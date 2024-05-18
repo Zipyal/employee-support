@@ -18,25 +18,26 @@ class EmployeeController extends Controller
         'education' => 'required',
         'add_education' => 'nullable',
         'experience' => 'required|integer',
-        'role' => 'nullable',
         'username' => 'nullable',
         'email' => 'nullable|email',
         'password' => 'nullable',
-        'ban' => 'nullable',
+        'role_id' => 'nullable',
+        'ban' => 'nullable|boolean',
     ];
 
     public function index(Request $request)
     {
-        $role = $request->get('role');
-        if (strlen($role) && in_array($role, Employee::ROLES)) {
-            $employees = Employee::query()->where('role', '=', $role)->get();
+        $roleId = $request->get('role');
+        if (strlen($roleId) && in_array($roleId, array_keys(User::ROLES))) {
+            $employees = Employee::query()->whereHas('user', function ($query) use ($roleId) {
+                return $query->where('role_id', '=', $roleId);
+            })->get();
         } else {
             $employees = Employee::query()->get();
         }
 
         return view('employee.index', [
             'employees' => $employees,
-            'roles' => Employee::ROLES,
         ]);
     }
 
@@ -52,7 +53,6 @@ class EmployeeController extends Controller
     {
         return view('employee.edit', [
             'employee' => new Employee(),
-            'roles' => Employee::ROLES,
         ]);
     }
 
@@ -64,17 +64,23 @@ class EmployeeController extends Controller
         $employee = Employee::query()->create($validated);
 
         // Учётная запись сотрудника
-        if (strlen($request->get('username')) && strlen($request->get('email')) && strlen($request->get('password'))) {
+        if (strlen($request->get('username')) && strlen($request->get('password'))) {
+
             /** @var User $user */
             $user = User::query()->create([
                 'name' => $request->get('username'),
                 'email' => $request->get('email'),
+                'role_id' => $request->get('role_id'),
                 'password' => bcrypt($request->get('password')),
-                'banned_at' => $request->get('ban') ? new Carbon() : null,
             ]);
 
             $employee->user_id = $user->id;
             $employee->save();
+
+            $isBanned = filter_var($request->get('ban', false), FILTER_VALIDATE_BOOL);
+            if ($isBanned) {
+                $user->delete();
+            }
         }
 
         return redirect()->route('employee');
@@ -84,7 +90,6 @@ class EmployeeController extends Controller
     {
         return view('employee.edit', [
             'employee' => Employee::query()->findOrFail($id),
-            'roles' => Employee::ROLES,
         ]);
     }
 
@@ -95,26 +100,34 @@ class EmployeeController extends Controller
         $validated = $request->validate(self::VALIDATION_RULES);
         $employee->update($validated);
 
+
         // Учётная запись сотрудника
-        if (strlen($request->get('username')) || strlen($request->get('email')) || strlen($request->get('password'))) {
-            $userNewProperties = [
+        if (null !== $employee->user || strlen($request->get('username'))) {
+
+            $userData = [
                 'name' => $request->get('username'),
                 'email' => $request->get('email'),
-                'banned_at' => $request->get('ban') ? new Carbon() : null,
+                'role_id' => $request->get('role_id'),
             ];
 
             if (strlen($request->get('password'))) {
-                $userNewProperties['password'] = bcrypt($request->get('password'));
+                $userData['password'] = bcrypt($request->get('password'));
             }
 
             /** @var User $user */
             if (null !== $employee->user) {
                 $user = $employee->user;
-                $user->update($userNewProperties);
+                $user->update($userData);
             } else {
-                $user = User::query()->create($userNewProperties);
-                $employee->user_id = $user->id;
-                $employee->save();
+                $user = User::query()->create($userData);
+                $employee->update(['user_id' => $user->id]);
+            }
+
+            $isBanned = filter_var($request->get('ban', false), FILTER_VALIDATE_BOOL);
+            if ($isBanned) {
+                $user->delete();
+            } else {
+                $user->restore();
             }
         }
 

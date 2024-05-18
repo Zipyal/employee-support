@@ -7,7 +7,9 @@ use App\Models\Employee;
 use App\Models\Material;
 use App\Models\Task;
 use App\Models\Test;
+use App\Models\User;
 use Illuminate\Http\Request;
+use function Laravel\Prompts\error;
 
 class TaskController extends Controller
 {
@@ -18,7 +20,7 @@ class TaskController extends Controller
         'start_date' => 'required|date:Y-m-d',
         'end_date' => 'nullable|date:Y-m-d',
         'description' => 'required',
-        'author_uuid' => 'nullable',
+        'author_id' => 'nullable',
         'employee_uuid' => 'nullable',
         'briefing_uuid' => 'nullable',
         'test_uuid' => 'nullable',
@@ -45,10 +47,15 @@ class TaskController extends Controller
         }
 
         $employees = Employee::query()->get()->pluck('fullName', 'uuid')->toArray();
-        $employeeUuid = $request->get('employee');
-        if (strlen($employeeUuid) && in_array($employeeUuid, array_keys($employees))) {
-            $tasks = $tasks->where('employee_uuid', '=', $employeeUuid);
+        if (in_array(auth()->user()?->role_id, [User::ROLE_ADMIN, User::ROLE_MENTOR])) {
+            $employeeUuid = $request->get('employee');
+            if (strlen($employeeUuid) && in_array($employeeUuid, array_keys($employees))) {
+                $tasks = $tasks->where('employee_uuid', '=', $employeeUuid);
+            }
+        } else {
+            $tasks = $tasks->where('employee_uuid', '=', auth()->user()?->employee?->uuid);
         }
+
 
         return view('task.index', [
             'tasks' => $tasks->get(),
@@ -61,6 +68,16 @@ class TaskController extends Controller
 
     public function show(string $id)
     {
+        /** @var Task $task */
+        $task = Task::query()->findOrFail($id);
+
+        if (
+            !in_array(auth()->user()?->role_id, [User::ROLE_ADMIN, User::ROLE_MENTOR])
+            && $task->employee_uuid != auth()->user()?->employee?->uuid
+        ) {
+            return abort(403);
+        }
+
         return view('task.view', [
             'task' => Task::query()->findOrFail($id),
             'statuses' => Task::STATUSES,
@@ -77,10 +94,10 @@ class TaskController extends Controller
             'task' => $task,
             'statuses' => Task::STATUSES,
             'types' => Task::TYPES,
-            'employees' => Employee::query()->get()->pluck('fullName', 'uuid')->toArray(),
-            'briefings' => Briefing::query()->get()->pluck('subject', 'uuid')->toArray(),
-            'materials' => Material::query()->get()->pluck('subject', 'uuid')->toArray(),
-            'tests' => Material::query()->get(['uuid', 'subject'])->pluck('subject', 'uuid')->toArray(),
+            'employees' => Employee::query()->with('user')->get()->sortBy('user.role_id'),
+            'briefings' => Briefing::query()->get(['uuid', 'subject'])->pluck('subject', 'uuid')->toArray(),
+            'materials' => Material::query()->get(['uuid', 'subject'])->pluck('subject', 'uuid')->toArray(),
+            'tests' => Test::query()->get(['uuid', 'subject'])->pluck('subject', 'uuid')->toArray(),
         ]);
     }
 
@@ -98,7 +115,7 @@ class TaskController extends Controller
             'task' => Task::query()->findOrFail($id),
             'statuses' => Task::STATUSES,
             'types' => Task::TYPES,
-            'employees' => Employee::query()->get()->pluck('fullName', 'uuid')->toArray(),
+            'employees' => Employee::query()->with('user')->get()->sortBy('user.role_id'),
             'briefings' => Briefing::query()->get()->pluck('subject', 'uuid')->toArray(),
             'materials' => Material::query()->get()->pluck('subject', 'uuid')->toArray(),
             'tests' => Test::query()->get(['uuid', 'subject'])->pluck('subject', 'uuid')->toArray(),

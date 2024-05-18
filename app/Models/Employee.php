@@ -18,13 +18,10 @@ use Illuminate\Support\Carbon;
  * @property string $patronymic
  * @property string $phone
  * @property string $email
- * @property string $position
- * @property string $department
  * @property Carbon $birth_date
  * @property string $education
  * @property string $add_education
- * @property string $experience
- * @property string $role
+ * @property int $experience
  * @property string $user_id
  *
  * @property Employee $mentor
@@ -37,12 +34,6 @@ class Employee extends BaseModel
 {
     use HasFactory;
     use HasUuids;
-
-    public const ROLES = [
-        'Сотрудник',
-        'Наставник',
-        'Администратор',
-    ];
 
     public $incrementing = false;
     protected $primaryKey = 'uuid';
@@ -61,6 +52,25 @@ class Employee extends BaseModel
         if ($this->patronymic) {
             $fullName[] = $this->patronymic;
         }
+        return implode(' ', $fullName);
+    }
+
+    public function getShortNameAttribute(): string
+    {
+        $fullName = [];
+        $fullName[] = $this->last_name;
+        $fullName[] = mb_substr($this->first_name, 0, 1) . '.';
+        if ($this->patronymic) {
+            $fullName[] = mb_substr($this->patronymic, 0, 1) . '.';
+        }
+        return implode(' ', $fullName);
+    }
+
+    public function getLastFirstNameAttribute(): string
+    {
+        $fullName = [];
+        $fullName[] = $this->last_name;
+        $fullName[] = $this->first_name;
         return implode(' ', $fullName);
     }
 
@@ -95,6 +105,6 @@ class Employee extends BaseModel
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'user_id', 'id');
+        return $this->belongsTo(User::class, 'user_id', 'id')->withTrashed();
     }
 }

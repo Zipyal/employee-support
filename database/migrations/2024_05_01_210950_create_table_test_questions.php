@@ -17,7 +17,7 @@ return new class extends Migration
         Schema::create(self::TABLE_NAME, function (Blueprint $table) {
             $table->uuid()->primary();
             $table->string('text')->comment('Текст вопроса');
-            $table->foreignUuid('test_uuid')->references('uuid')->on('tests')->onDelete('cascade');
+            $table->foreignUuid('test_uuid')->comment('Ссылка на тест')->references('uuid')->on('tests')->onDelete('cascade');
             $table->timestamps();
         });
     }

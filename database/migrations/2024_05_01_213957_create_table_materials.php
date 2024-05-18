@@ -19,10 +19,8 @@ return new class extends Migration
             $table->string('subject')->comment('Объект');
             $table->string('category')->comment('Категория');
             $table->text('text')->comment('Текст статьи');
-            $table->uuid('author_uuid')->nullable();
+            $table->foreignId('author_id')->nullable()->comment('Ссылка на пользователя (автор)')->references('id')->on('users')->onDelete('set null');
             $table->timestamps();
-
-            $table->foreign('author_uuid')->references('uuid')->on('employees')->onDelete('set null');
         });
     }
 

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Employee;
 use App\Models\Test;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class TestController extends Controller
@@ -14,8 +16,24 @@ class TestController extends Controller
 
     public function index(Request $request)
     {
+        $tests = Test::query();
+
+        $employees = Employee::query()->get()->pluck('fullName', 'uuid')->toArray();
+        if (in_array(auth()->user()?->role_id, [User::ROLE_ADMIN, User::ROLE_MENTOR])) {
+            $employeeUuid = $request->get('employee');
+            if (strlen($employeeUuid) && in_array($employeeUuid, array_keys($employees))) {
+                $tests = $tests->whereHas('tasks', function($query) use ($employeeUuid) {
+                    return $query->where('employee_uuid', '=', $employeeUuid);
+                });
+            }
+        } else {
+            $tests = $tests->whereHas('tasks', function($query) {
+                return $query->where('employee_uuid', '=', auth()->user()?->employee?->uuid);
+            });
+        }
+
         return view('test.index', [
-            'tests' => Test::query()->get(),
+            'tests' => $tests->get(),
         ]);
     }
 

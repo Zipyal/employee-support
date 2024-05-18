@@ -23,9 +23,8 @@ return new class extends Migration {
             $table->string('department')->comment('Отдел');
             $table->decimal('salary', 8, 2)->comment('Зарплата');
             $table->tinyInteger('rate')->comment('Ставка');
+            $table->foreignUuid('employee_uuid')->comment('Ссылка на сотрудника')->references('uuid')->on('employees')->onDelete('cascade');
             $table->timestamps();
-
-            $table->foreignUuid('employee_uuid')->references('uuid')->on('employees')->onDelete('cascade');
         });
     }
 

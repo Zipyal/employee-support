@@ -1,5 +1,10 @@
+@php
+    use App\Models\User;
+@endphp
 @extends('layout.main')
-@section('title') Профиль @endsection
+@section('title')
+    Профиль
+@endsection
 @section('content')
 
     <div class="container">
@@ -35,7 +40,7 @@
                 </tr>
                 <tr>
                     <th>Роль</th>
-                    <td>{{ $employee->role }}</td>
+                    <td>{{ User::ROLES[$employee->user->role_id] ?? null }}</td>
                 </tr>
                 <tr>
                     <th>Должность</th>

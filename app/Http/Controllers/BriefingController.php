@@ -10,7 +10,7 @@ class BriefingController extends Controller
     const VALIDATION_RULES = [
         'subject' => 'required',
         'text' => 'required',
-        'author_uuid' => 'nullable|exists:employees,uuid',
+        'author_id' => 'nullable|exists:employees,uuid',
     ];
 
     public function index(Request $request)

@@ -6,8 +6,10 @@
     <title>Employee Support</title>
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('libs/fontawesome/css/all.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('libs/bootstrap-toggle/bootstrap5-toggle.min.css') }}" rel="stylesheet">
     <script src="{{ asset('js/bootstrap.bundle.min.js') }}" defer></script>
     <script src="{{ asset('libs/fontawesome/js/all.min.js') }}" defer></script>
+    <script src="{{ asset('libs/bootstrap-toggle/bootstrap5-toggle.ecmas.min.js') }}" defer></script>
 </head>
 <body>
     @if(Auth::guest() !== true)
@@ -17,7 +19,7 @@
 @hasSection('title')
     <div class="container">
         <div class="row my-3">
-            <div class="col">
+            <div class="col-8 col-md-10">
                 @hasSection('title')
                     <h1>@yield('title')</h1>
                 @endif
@@ -26,7 +28,7 @@
                 @endif
             </div>
             @hasSection('buttons')
-                <div class="col text-end btn-group-lg">
+                <div class="col-4 col-md-2 text-end btn-group-lg">
                     @yield('buttons')
                 </div>
             @endif
