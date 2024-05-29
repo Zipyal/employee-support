@@ -39,7 +39,7 @@
 
 8. Создать учётную запись администратора:  
    ```bash
-   php artisan app:create-admin:
+   php artisan app:create-admin
    ```
 
 9. Настроить и запустить один из веб-серверов на выбор:  
