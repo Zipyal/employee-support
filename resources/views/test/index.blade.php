@@ -1,58 +1,75 @@
 @php
+    use App\Models\Test;
     use App\Models\User;
-    /** @var \App\Models\Test[]|\Illuminate\Database\Eloquent\Collection $test */
+    use App\Models\TestResult;
+    use Illuminate\Database\Eloquent\Collection;
+
+    /** @var Test[]|Collection $tests */
+    /** @var User $currentUser */
+    $currentUser = auth()->user();
 @endphp
 @extends('layout.main')
-@section('title')Тесты@endsection
-@section('buttons')
-    @if(in_array(auth()?->user()?->role_id, [User::ROLE_ADMIN, User::ROLE_MENTOR]))
-    <a class="btn btn-sm btn-outline-success" href="{{ route('test-add') }}"><i class="fas fa-plus"></i></a>
-    @endif
+@section('title')
+    Тесты
 @endsection
 @section('content')
-
     <div class="container">
         @if($tests->isNotEmpty())
-            <table class="table table-hover mt-5">
-                <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Категория</th>
-                    <th scope="col">Тема</th>
-                    <th scope="col">Вопросов</th>
-                    <th scope="col">Добавлено</th>
-                    <th scope="col">Обновлено</th>
-                    <th scope="col">Автор</th>
-                    <th scope="col" class="text-end">Действия</th>
-                </tr>
-                </thead>
-                <tbody>
-                @foreach($tests as $test)
-                    <tr>
-                        <td>{{ $loop->index+1 }}</td>
-                        <td>{{ $test->category }}</td>
-                        <td>{{ $test->subject }}</td>
-                        <td>{{ $test->questions?->count() }}</td>
-                        <td>{{ $test->created_at }}</td>
-                        <td>{{ $test->updated_at }}</td>
-                        <td>{{ $test->author?->employee?->lastFirstName ?? $test->author?->name }}</td>
-                        <td class="text-end">
-                            <a class="btn btn-sm btn-outline-dark" href="{{ route('test-show', ['id' => $test]) }}"><i class="far fa-eye"></i></a>
-                            @if(in_array(auth()?->user()?->role_id, [User::ROLE_ADMIN, User::ROLE_MENTOR]))
-                                <a class="btn btn-sm btn-outline-dark" href="{{ route('test-edit', ['id' => $test]) }}"><i class="fas fa-pencil-alt"></i></a>
-                                <form method="post" class="d-inline" action="{{ route('test-delete', ['id' => $test]) }}" onSubmit="if(!confirm('Вы действительно хотите удалить?')){return false;}">
-                                    @csrf
-                                    <button type="submit" class="btn btn-sm btn-danger"><i class="fas fa-trash-alt"></i></button>
-                                </form>
-                            @endif
-                        </td>
-                    </tr>
-                @endforeach
-                </tbody>
-            </table>
+            <div class="row">
+                <div class="col-12 col-md mb-5">
+                    {{--<h3 class="mb-5">Материалы</h3>--}}
+                    @foreach($tests as $item)
+                        <div class="card shadow-sm mb-5 @if($item->isSolvedByUser()) text-bg-light-success @endif">
+                            <div class="card-body">
+                                {{--<div class="text-muted opacity-50">Материал</div>--}}
+                                <div class="card-title h5">{{ $item->subject }}</div>
+                                <div class="card-subtitle text-muted"><i
+                                        class="far fa-clock"></i> {{ $item->updated_at?->format('d.m.Y - H:i') }}</div>
+                                <div class="mt-3 card-text">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <table class="table table-sm">
+                                                <tr>
+                                                    <td class="col-3 text-end opacity-50">Категория:</td>
+                                                    <td class="col-9">{{ $item->category }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-end opacity-50">Вопросов:</td>
+                                                    <td>{{ $item->questions->count() }}</td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <div class="row">
+                                    <div class="col">
+                                        @if($item->isSolvedByUser())
+                                            <span class="text-success">Тест уже пройден <i class="fas fa-check"></i></span>
+                                            @if($item->resultByUser()?->score)
+                                                @php $score = round($item->resultByUser()?->score) @endphp
+                                                <span class="ms-2 @if($score/TestResult::MAX_SCORE < 0.5) text-danger @elseif($score/TestResult::MAX_SCORE < 0.7) text-warning @else text-success @endif">{{ $score . '/' . TestResult::MAX_SCORE  }} бал.</span>
+                                            @endif
+                                        @endif
+                                    </div>
+                                    <div class="col text-end">
+                                        @if(!$item->isSolvedByUser())
+                                            <a class="btn btn-sm btn-outline-success"
+                                               href="{{ route('test-solve', ['id' => $item]) }}"><i
+                                                    class="fas fa-graduation-cap"></i> Пройти тест</a>
+                                        @endif
+                                        <a class="btn btn-sm btn-outline-primary ms-3"
+                                           href="{{ route('test-show', ['id' => $item]) }}">Подробнее →</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
         @else
-            <div class="text-muted">Данные отсутствуют.</div>
+            <div class="text-muted">Нет назначенных вам (через задачи) тестов.</div>
         @endif
     </div>
-
 @endsection

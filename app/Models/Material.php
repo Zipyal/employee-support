@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -16,6 +15,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $subject
  * @property string $category
  * @property string $text
+ * @property bool $published
+ * @property int $author_uuid
  *
  * @property User $author
  * @property Task[]|Collection $tasks
@@ -24,6 +25,7 @@ class Material extends BaseModel
 {
     use HasFactory;
     use HasUuids;
+    use HasUploadImageTrait;
 
     public $incrementing = false;
     protected $primaryKey = 'uuid';
@@ -36,7 +38,7 @@ class Material extends BaseModel
 
     public function author(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'author_id', 'id');
+        return $this->belongsTo(User::class, 'author_uuid', 'uuid');
     }
 
     public function tasks(): HasMany

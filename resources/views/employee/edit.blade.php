@@ -1,21 +1,30 @@
 @php
-    use App\Models\User;
+    use App\Models\Employee;
+    use App\Models\Permission;
+    use App\Models\Role;
+    use App\Models\User;use Illuminate\Database\Eloquent\Collection;
 @endphp
 @extends('layout.main')
 @section('title')
-    {{ $employee->uuid ? 'Редактирование' : 'Создание' }} сотрудника
+    {{ $employee->uuid ? 'Редактирование' : 'Добавление' }} сотрудника
 @endsection
-@section('buttons')
-    @if($employee->uuid)
-        <a class="btn btn-outline-dark" href="{{ route('employee-show', ['id' => $employee->uuid]) }}"><i
-                class="far fa-eye"></i></a>
-        <form method="post" class="d-inline" action="{{ route('employee-delete', ['id' => $employee]) }}"
-              onSubmit="if(!confirm('Вы действительно хотите удалить?')){return false;}">
-            @csrf
-            <button type="submit" class="btn btn-lg btn-danger"><i class="fas fa-trash-alt"></i></button>
-        </form>
-    @endif
-@endsection
+@if(Route::is('employee-edit'))
+    @section('buttons')
+        @if($employee->uuid)
+            @canany([Permission::EMPLOYEE_SEE_ALL, Permission::EMPLOYEE_SEE_OWN_INTERNS])
+                <a class="btn btn-outline-dark" href="{{ route('employee-show', ['id' => $employee->uuid]) }}"><i
+                        class="far fa-eye"></i></a>
+            @endcanany
+            @can(Permission::EMPLOYEE_DELETE)
+                <form method="post" class="d-inline" action="{{ route('employee-delete', ['id' => $employee]) }}"
+                      onSubmit="if(!confirm('Вы действительно хотите удалить?')){return false;}">
+                    @csrf
+                    <button type="submit" class="btn btn-lg btn-danger"><i class="fas fa-trash-alt"></i></button>
+                </form>
+            @endcan
+        @endif
+    @endsection
+@endif
 @section('content')
 
     @php
@@ -27,7 +36,7 @@
     @endphp
 
     <div class="container">
-        <form method="post" action="{{ $formUrl }}" class="row g-3 needs-validation">
+        <form method="post" action="{{ $formUrl }}" enctype="multipart/form-data" class="row g-3 needs-validation">
             @csrf
             <div class="col-12 col-md-4">
                 <label for="last_name" class="form-label">Фамилия</label>
@@ -57,6 +66,24 @@
                     <input type="text" class="form-control @error('patronymic') is-invalid @enderror" id="patronymic"
                            name="patronymic" value="{{ old('patronymic') ?? $employee->patronymic }}">
                     @error('patronymic')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+
+            <div class="col-12 col-md-4">
+                <label for="gender" class="form-label">Пол</label>
+                <div class="input-group has-validation">
+                    <select id="gender" name="gender" class="form-select @error('gender') is-invalid @enderror">
+                        <option value=""> - не выбрано -</option>
+                        @foreach (Employee::GENDERS_FULL as $genderCode => $genderName)
+                            <option
+                                value="{{ $genderCode }}" {{ (old('gender') ?? $employee->gender == $genderCode) ? 'selected' : '' }}>
+                                {{ $genderName }}
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('gender')
                     <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
@@ -129,6 +156,18 @@
                 </div>
             </div>
 
+            <div class="col-8">
+                @php
+                    $images = new Collection();
+                    $images->add($employee);
+                @endphp
+                @include('_form_upload_image', [
+                    'images' => $images,
+                    'multiple' => false,
+                    'deleteUrl' => route('employee-image-delete', ['id' => $employee->uuid])
+                ])
+            </div>
+
             <div class="col-12 mt-5">
                 <fieldset class="border rounded-3 px-3 pb-3 bg-light">
                     <legend class="float-none w-auto px-1 small text-muted">Учётная запись</legend>
@@ -136,15 +175,17 @@
                         <div class="col-12 col-md-6 col-lg-3 mb-3">
                             <label for="role" class="form-label">Роль</label>
                             <div class="input-group has-validation">
-                                <select id="role" name="role_id" class="form-select @error('role_id') is-invalid @enderror">
-                                    <option value=""> - Не выбрано -</option>
-                                    @foreach (User::ROLES as $roleId => $roleName)
-                                        <option value="{{ $roleId }}" {{ (old('role_id') ?? $employee->user?->role_id) == $roleId ? 'selected' : '' }}>
+                                <select id="role" name="role"
+                                        class="form-select @error('role') is-invalid @enderror">
+                                    <option value=""> - не выбрано -</option>
+                                    @foreach (Role::query()->pluck('name') as $roleName)
+                                        <option
+                                            value="{{ $roleName }}" {{ (old('role') ?? in_array($roleName, $employee->user?->roles->pluck('name')->toArray() ?? [])) ? 'selected' : '' }}>
                                             {{ $roleName }}
                                         </option>
                                     @endforeach
                                 </select>
-                                @error('role_id')
+                                @error('role')
                                 <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -182,13 +223,13 @@
                                 @error('password')
                                 <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
-                                <div id="password-help" class="form-text">Оставьте пустым если не желаете менять</div>
+                                <div id="password-help" class="form-text">Оставьте пустым, если не желаете менять</div>
                             </div>
                         </div>
 
-                        <div class="col-12 col-md-6 col-lg-2 text-end pt-4">
+                        <div class="col-12 col-md-6 col-lg-3 text-center pt-4 mt-3">
                             <div class="form-check form-switch text-start">
-                                <label class="form-check-label" for="ban">Заблокировать</label>
+                                <label class="form-check-label" for="ban">Блокировать</label>
                                 <input class="form-check-input" type="checkbox" id="ban" name="ban" value="1"
                                        @if(old('ban') || (old('ban') === null && $employee->user?->deleted_at !== null)) checked @endif>
                             </div>
@@ -201,6 +242,11 @@
                 <div class="row">
                     <div class="col text-start">
                         <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Сохранить</button>
+                    </div>
+                    <div class="col text-center">
+                        <button type="submit" name="stay-here" class="btn btn-outline-primary" value="1"><i
+                                class="fas fa-save"></i> Сохранить и продолжить редактирование
+                        </button>
                     </div>
                     <div class="col text-end">
                         @if($employee->uuid)

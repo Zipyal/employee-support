@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Role;
 use App\Models\TestQuestion;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -20,13 +21,13 @@ class TestFactory extends Factory
     {
         $faker = \Faker\Factory::create('ru_RU');
 
-        $randomUser = User::query()->whereIn('role_id', [User::ROLE_MENTOR, User::ROLE_ADMIN])->inRandomOrder()->first();
+        $randomUser = User::query()->withoutRole([Role::ROLE_INTERN, Role::ROLE_EMPLOYEE])->inRandomOrder()->first();
         $createdAt = $faker->dateTimeBetween('-1 year');
 
         return [
             'category' => $faker->jobTitle(),
             'subject' => rtrim($faker->realText(50), '!?. '),
-            'author_id' => $randomUser->id,
+            'author_uuid' => $randomUser->uuid,
             'created_at' => $createdAt,
             'updated_at' => $faker->dateTimeBetween($createdAt->format('Y-m-d H:i:s')),
         ];

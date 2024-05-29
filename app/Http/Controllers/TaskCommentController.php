@@ -10,7 +10,7 @@ class TaskCommentController extends Controller
     const VALIDATION_RULES = [
         'task_id' => 'required',
         'text' => 'required',
-        'author_id' => 'nullable',
+        'author_uuid' => 'nullable',
     ];
 
     public function store(Request $request)

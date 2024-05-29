@@ -6,59 +6,34 @@
 @section('title')
     Материалы
 @endsection
-@section('buttons')
-    @if(in_array(auth()?->user()?->role_id, [User::ROLE_ADMIN, User::ROLE_MENTOR]))
-        <a class="btn btn-sm btn-outline-success" href="{{ route('material-add') }}"><i class="fas fa-plus"></i></a>
-    @endif
-@endsection
 @section('content')
     <div class="container">
         @if($materials->isNotEmpty())
-            <table class="table table-hover mt-5">
-                <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Категория</th>
-                    <th scope="col">Тема</th>
-                    <th scope="col">Текст</th>
-                    <th scope="col">Добавлено</th>
-                    <th scope="col">Обновлено</th>
-                    <th scope="col">Автор</th>
-                    <th scope="col" class="text-end">Действия</th>
-                </tr>
-                </thead>
-                <tbody>
-                @foreach($materials as $material)
-                    <tr>
-                        <td>{{ $loop->index+1 }}</td>
-                        <td>{{ $material->category }}</td>
-                        <td>{{ $material->subject }}</td>
-                        <td>{{ Str::limit($material->text, 50, ' ...') }}</td>
-                        <td>{{ $material->created_at }}</td>
-                        <td>{{ $material->updated_at }}</td>
-                        <td>{{ $material->author?->employee?->fullName ?? $material->author?->name }}</td>
-                        <td class="text-end text-nowrap">
-                            <a class="btn btn-sm btn-outline-dark"
-                               href="{{ route('material-show', ['id' => $material]) }}"><i
-                                    class="far fa-eye"></i></a>
-                            <a class="btn btn-sm btn-outline-dark"
-                               href="{{ route('material-edit', ['id' => $material]) }}"><i
-                                    class="fas fa-pencil-alt"></i></a>
-                            <form method="post" class="d-inline"
-                                  action="{{ route('material-delete', ['id' => $material]) }}"
-                                  onSubmit="if(!confirm('Вы действительно хотите удалить?')){return false;}">
-                                @csrf
-                                <button type="submit" class="btn btn-sm btn-danger"><i
-                                        class="fas fa-trash-alt"></i></button>
-                            </form>
-                        </td>
-                    </tr>
-                @endforeach
-                </tbody>
-            </table>
+            <div class="row">
+                <div class="col-12 col-md mb-5">
+                    {{--<h3 class="mb-5">Материалы</h3>--}}
+                    @foreach($materials as $item)
+                        <div class="card shadow-sm mb-5">
+                            <div class="card-body">
+                                {{--<div class="text-muted opacity-50">Материал</div>--}}
+                                <div class="card-title h5">{{ $item->subject }}</div>
+                                <div class="card-subtitle text-muted"><i class="far fa-clock"></i> {{ $item->updated_at }}</div>
+                                <div class="my-3 card-text">{{ Str::limit($item->text, 300, ' ...') }}</div>
+                            </div>
+                            <div class="card-footer">
+                                <div class="row">
+                                    <div class="col"></div>
+                                    <div class="col text-end">
+                                        <a class="btn btn-sm btn-outline-primary" href="{{ route('material-show', ['id' => $item]) }}">Подробнее →</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
         @else
-            <div class="text-muted">Данные отсутствуют.</div>
+            <div class="text-muted">Нет опубликованных материалов.</div>
         @endif
     </div>
-
 @endsection

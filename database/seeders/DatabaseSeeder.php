@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             BriefingSeeder::class,
             TestSeeder::class,
             TaskSeeder::class,
+            TaskCommentSeeder::class,
         ]);
     }
 }

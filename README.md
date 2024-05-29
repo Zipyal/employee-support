@@ -1,4 +1,4 @@
-# Установка
+# Установка и запуск
 
 1. Склонировать проект из репозитория:   
     ```bash
@@ -49,3 +49,17 @@
    ```bash
    php artisan serve
    ```
+
+
+# Разработка и тестирование
+
+Команда для быстрого наполнения сайта тестовыми данными и запуска встроенного локального сервера:      
+_⚠️База данных будет перезаписана!_ 
+```bash
+php artisan optimize:clear \
+&& php artisan cache:clear \
+&& php artisan migrate:fresh \
+&& php artisan app:create-admin --auto \
+&& php artisan db:seed \
+&& php artisan serve
+```

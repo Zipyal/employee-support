@@ -17,7 +17,7 @@ return new class extends Migration {
             $table->uuid()->primary();
             $table->text('text')->comment('Текст комментария');
             $table->foreignId('task_id')->comment('Ссылка на задачу')->references('id')->on('tasks')->onDelete('cascade');
-            $table->foreignId('author_id')->nullable()->comment('Ссылка на пользователя (автор)')->references('id')->on('users')->onDelete('set null');
+            $table->foreignUuid('author_uuid')->nullable()->comment('Ссылка на пользователя (автор)')->references('uuid')->on('users')->onDelete('set null');
             $table->timestamps();
         });
     }

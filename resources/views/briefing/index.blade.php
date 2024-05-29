@@ -1,61 +1,52 @@
 @php
+    use App\Models\Briefing;
+    use App\Models\BriefingEmployee;
+    use App\Models\Employee;
+    use App\Models\Permission;
     use App\Models\User;
-    /** @var \App\Models\Briefing[]|\Illuminate\Database\Eloquent\Collection $briefings */
+    use Illuminate\Database\Eloquent\Collection;
+
+    /** @var Briefing[]|Collection $briefings */
 @endphp
 @extends('layout.main')
 @section('title')
     Инструктажи
 @endsection
-@section('buttons')
-    @if(in_array(auth()?->user()?->role_id, [User::ROLE_ADMIN, User::ROLE_MENTOR]))
-        <a class="btn btn-sm btn-outline-success" href="{{ route('briefing-add') }}"><i class="fas fa-plus"></i></a>
-    @endif
-@endsection
 @section('content')
-
     <div class="container">
         @if($briefings->isNotEmpty())
-            <table class="table table-hover mt-5">
-                <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Тема</th>
-                    <th scope="col">Текст</th>
-                    <th scope="col">Добавлено</th>
-                    <th scope="col">Обновлено</th>
-                    <th scope="col">Автор</th>
-                    <th scope="col" class="text-end">Действия</th>
-                </tr>
-                </thead>
-                <tbody>
-                @foreach($briefings as $briefing)
-                    <tr>
-                        <td>{{ $loop->index+1 }}</td>
-                        <td>{{ $briefing->subject }}</td>
-                        <td>{{ Str::limit($briefing->text, 50, ' ...') }}</td>
-                        <td>{{ $briefing->created_at }}</td>
-                        <td>{{ $briefing->updated_at }}</td>
-                        <td>{{ $briefing->author?->employee?->fullName ?? $briefing->author?->name }}</td>
-                        <td class="text-end text-nowrap">
-                            <a class="btn btn-sm btn-outline-dark"
-                               href="{{ route('briefing-show', ['id' => $briefing]) }}"><i class="far fa-eye"></i></a>
-                            <a class="btn btn-sm btn-outline-dark"
-                               href="{{ route('briefing-edit', ['id' => $briefing]) }}"><i
-                                    class="fas fa-pencil-alt"></i></a>
-                            <form method="post" class="d-inline"
-                                  action="{{ route('briefing-delete', ['id' => $briefing]) }}"
-                                  onSubmit="if(!confirm('Вы действительно хотите удалить?')){return false;}">
-                                @csrf
-                                <button type="submit" class="btn btn-sm btn-danger"><i class="fas fa-trash-alt"></i>
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                @endforeach
-                </tbody>
-            </table>
+            <div class="row">
+                <div class="col-12 col-md mb-5">
+                    {{--<h3 class="mb-5">Материалы</h3>--}}
+                    @foreach($briefings as $item)
+                        @php $isRead = $item->isReadByEmployee(auth()->user()?->employee?->uuid); @endphp
+                        <div class="card shadow-sm mb-5 @if($isRead) text-bg-light-success @endif">
+                            <div class="card-body">
+                                {{--<div class="text-muted opacity-50">Материал</div>--}}
+                                <div class="card-title h5">{{ $item->subject }}</div>
+                                <div class="card-subtitle text-muted"><i
+                                        class="far fa-clock"></i> {{ $item->updated_at }}</div>
+                                <div class="my-3 card-text">{{ Str::limit($item->text, 300, ' ...') }}</div>
+                            </div>
+                            <div class="card-footer">
+                                <div class="row">
+                                    <div class="col text-start">
+                                        @if($isRead)
+                                            <span class="text-success">Прочитано <i class="fas fa-check"></i></span>
+                                        @endif
+                                    </div>
+                                    <div class="col text-end">
+                                        <a class="btn btn-sm btn-outline-primary"
+                                           href="{{ route('briefing-show', ['id' => $item]) }}">Подробнее →</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
         @else
-            <div class="text-muted">Данные отсутствуют.</div>
+            <div class="text-muted">Нет опубликованных инструктажей.</div>
         @endif
     </div>
 @endsection

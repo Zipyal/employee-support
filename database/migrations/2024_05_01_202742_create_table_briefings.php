@@ -17,7 +17,8 @@ return new class extends Migration {
             $table->uuid()->primary();
             $table->string('subject')->comment('Тема');
             $table->text('text')->comment('Текст');
-            $table->foreignId('author_id')->nullable()->comment('Ссылка на пользователя (автор)')->references('id')->on('users')->onDelete('set null');
+            $table->boolean('published')->nullable()->comment('Опубликован или нет?');
+            $table->foreignUuid('author_uuid')->nullable()->comment('Ссылка на пользователя (автор)')->references('uuid')->on('users')->onDelete('set null');
             $table->timestamps();
         });
     }

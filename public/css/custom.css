@@ -1,0 +1,179 @@
+:root {
+    --light-blue: #d1e3ff;
+    --light-success: rgba(168, 243, 204, 0.3);
+    --light-warning: rgba(255, 244, 128, 0.59);
+}
+
+.text-bg-light-success {
+    background-color: var(--light-success);
+}
+
+.table:not(.table-borderless) > :not(caption) tr:last-of-type > th,
+.table:not(.table-borderless) > :not(caption) tr:last-of-type > td {
+    border-bottom-width: 0; /* Remove Bootstrap's bottom border */
+    border-top-width: 1px; /* Add a top border */
+}
+
+.bg-light-primary {
+    background-color: var(--light-blue)!important;
+}
+
+
+
+.hover-bg-light:hover {
+    background-color: var(--bs-light)!important;
+}
+.hover-bg-light-primary:hover {
+    background-color: var(--light-blue)!important;
+}
+
+.hover-border-light,
+.hover-border-light-primary {
+    border: 1px solid transparent;
+}
+.hover-border-light:hover {
+    border-color: var(--bs-light)!important;
+}
+.hover-border-light-primary:hover {
+    border-color: var(--light-blue)!important;
+}
+
+
+.hover-shadow-sm:hover {
+    box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075) !important;
+}
+.hover-border-transparent:hover {
+    border-color:transparent!important;
+}
+
+
+.odd-child-bg-light > *:nth-child(odd) {
+    background-color: var(--bs-light)!important;
+}
+.even-child-bg-light > *:nth-child(even) {
+    background-color: var(--bs-light)!important;
+}
+
+
+
+/* Nav dropdown on hover */
+@media only screen and (min-width: 992px) {
+    .dropdown:hover > .dropdown-menu {
+        display: block;
+        margin-top: 0;
+    }
+}
+.dropdown-menu.nav-level-2 {
+    position: absolute;
+    left: 100%;
+    top: 0;
+    margin-top: 0;
+    margin-left: -10px;
+}
+@media (max-width: 991px) {
+    #main-navbar .dropdown-menu {
+        display: block;
+        margin-top: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+        border: none;
+        position: relative;
+        left: 2em;
+    }
+    #main-navbar .dropdown-menu {
+        margin-bottom: 1em;
+    }
+    .navbar-nav.nav-level-0 > li > a {
+        margin-left: 1em;
+        font-weight: bold;
+    }
+}
+
+.hover-underline {
+    text-decoration: none!important;
+}
+.hover-underline:hover {
+    text-decoration: underline!important;
+}
+
+
+.task-priority-low {
+    background-color: #dbfaff !important;
+}
+.task-priority-low,
+.task-priority-low a,
+.task-priority-low .text-muted {
+    color: #000!important;
+}
+
+.task-priority-normal {
+    background-color: #ffffff!important;
+}
+.task-priority-normal,
+.task-priority-normal a,
+.task-priority-normal .text-muted {
+    color: #000!important;
+}
+
+.task-priority-high {
+    background-color: #ffef98 !important;
+}
+.task-priority-high,
+.task-priority-high a,
+.task-priority-high .text-muted {
+    color: #000!important;
+}
+
+.task-priority-urgent {
+    background-color: #ffb0b0 !important;
+}
+.task-priority-urgent,
+.task-priority-urgent a,
+.task-priority-urgent .text-muted {
+    color: #fff!important;
+}
+
+.task-priority-instant {
+    background-color: #c44b4b !important;
+}
+.task-priority-instant,
+.task-priority-instant a,
+.task-priority-instant .text-muted {
+    color: #fff!important;
+}
+
+.task-priority-low .text-muted,
+.task-priority-normal .text-muted,
+.task-priority-high .text-muted,
+.task-priority-urgent .text-muted,
+.task-priority-instant .text-muted {
+    opacity: 0.75;
+}
+
+
+.check-with-label:checked + label {
+    background-color: var(--light-blue)!important;
+    position: relative;
+}
+.checkmark {
+    position: absolute;
+    top: 5px;
+    left: -1.5em;
+}
+.check-with-label + label > .checkmark {
+    display: none;
+}
+.check-with-label:checked + label > .checkmark {
+    display: inline-block;
+}
+
+
+.noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
+}
+

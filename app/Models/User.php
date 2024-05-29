@@ -4,27 +4,29 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
 
 /**
  * Class Briefing
  * @package App\Models
  *
+ * @property string $uuid
  * @property string $name
  * @property string $email
  * @property Carbon $email_verified_at
  * @property string $password
- * @property int $role_id
  *
  * @property Employee $employee
  */
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, SoftDeletes;
+    use HasFactory, Notifiable, SoftDeletes, HasUuids, HasRoles;
 
     public const STATUS_NONE = 'none';
     public const STATUS_BANNED = 'banned';
@@ -46,6 +48,7 @@ class User extends Authenticatable
         self::ROLE_ADMIN => 'Администратор',
     ];
 
+    protected $primaryKey = 'uuid';
     protected $dateFormat = 'Y-m-d H:i:s';
 
     /**
@@ -57,7 +60,6 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role_id',
     ];
 
     /**
@@ -79,7 +81,6 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'banned_at' => 'datetime',
             'password' => 'hashed',
         ];
     }

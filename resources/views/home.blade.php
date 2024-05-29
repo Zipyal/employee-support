@@ -5,19 +5,34 @@
 @section('title')Лента@endsection
 @section('content')
     <div class="container">
-    @if($materials->isNotEmpty())
-        <div class="row">
-        @foreach($materials as $material)
-            <div class="col-12 mb-5 p-3 shadow-sm">
-                <div class="h5">{{ $material->subject }}</div>
-                <div class="my-1 text-muted"><i class="far fa-clock"></i> {{ $material->created_at }}</div>
-                <div class="my-3">{{ Str::limit($material->text, 300, ' ...') }}</div>
-                <div class="mt-2"><a class="btn btn-sm btn-outline-primary" href="{{ route('material-show', ['id' => $material]) }}">Подробнее →</a></div>
+        @if($materials->isNotEmpty())
+            <div class="row">
+                <div class="col-12 col-md mb-5">
+                    {{--<h3 class="mb-5">Материалы</h3>--}}
+                    @foreach($materials as $item)
+                        <div class="card shadow-sm mb-5">
+                            <div class="card-body">
+                                {{--<div class="text-muted opacity-50">Материал</div>--}}
+                                <div class="card-title h5">{{ $item->subject }}</div>
+                                <div class="card-subtitle text-muted"><i class="far fa-clock"></i> {{ $item->updated_at }}</div>
+                                <div class="my-3 card-text">{{ Str::limit($item->text, 300, ' ...') }}</div>
+                            </div>
+                            <div class="card-footer">
+                                <div class="row">
+                                    <div class="col">
+                                        <span class="text-muted opacity-50">Категория:</span> {{ $item->category }}
+                                    </div>
+                                    <div class="col text-end">
+                                        <a class="btn btn-sm btn-outline-primary" href="{{ route('material-show', ['id' => $item]) }}">Подробнее →</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
             </div>
-        @endforeach
-        </div>
-    @else
-        <div class="text-muted">Данные отсутствуют.</div>
-    @endif
+        @else
+            <div class="text-muted">Нет опубликованных материалов.</div>
+        @endif
     </div>
 @endsection

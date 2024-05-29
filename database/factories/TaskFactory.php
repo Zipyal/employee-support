@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Briefing;
 use App\Models\Employee;
 use App\Models\Material;
+use App\Models\Role;
 use App\Models\Task;
 use App\Models\Test;
 use App\Models\User;
@@ -29,7 +30,7 @@ class TaskFactory extends Factory
         $randomBriefing = Briefing::query()->inRandomOrder()->first();
         $randomMaterial = Material::query()->inRandomOrder()->first();
 
-        $randomUser = User::query()->whereIn('role_id', [User::ROLE_MENTOR, User::ROLE_ADMIN])->inRandomOrder()->first();
+        $randomUser = User::query()->withoutRole(Role::ROLE_INTERN)->inRandomOrder()->first();
         $createdAt = $faker->dateTimeBetween('-1 year');
         $updatedAt = $faker->dateTimeBetween($createdAt->format('Y-m-d H:i:s'));
 
@@ -37,6 +38,7 @@ class TaskFactory extends Factory
             'subject' => rtrim($faker->realText(50), '!?. '),
             'status' => array_rand(array_flip(Task::STATUSES)),
             'type' => array_rand(array_flip(Task::TYPES)),
+            'priority' => array_rand(array_flip(Task::PRIORITIES)),
             'start_date' => $createdAt->format('Y-m-d'),
             'end_date' => $createdAt->modify('+' . rand(1, 5) . ' day'),
             'description' => rtrim($faker->realText(rand(200, 500)), '!?. '),
@@ -44,7 +46,7 @@ class TaskFactory extends Factory
             'test_uuid' => $randomTest->uuid,
             'briefing_uuid' => $randomBriefing->uuid,
             'material_uuid' => $randomMaterial->uuid,
-            'author_id' => $randomUser->id,
+            'author_uuid' => $randomUser->uuid,
             'created_at' => $createdAt,
             'updated_at' => $updatedAt,
         ];

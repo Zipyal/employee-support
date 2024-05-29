@@ -4,17 +4,21 @@
     <a class="btn btn-sm btn-outline-success" href="{{ route('employee-add') }}"><i class="fas fa-plus"></i></a>
 @endsection
 @section('filter')
-    <form method="get" action="{{ url()->current() }}">
-        <label class="text-muted" for="filter-role">Роль: </label>
-        <select id="filter-role" class="form-control form-select" name="role" onchange="this.form.submit()">
-            <option value="">- не выбрано -</option>
+    <div class="container">
+        <div class="row">
+            <form method="get" action="{{ url()->current() }}">
+                <label class="text-muted" for="filter-role">Роль: </label>
+                <select id="filter-role" class="form-control form-select" name="role" onchange="this.form.submit()">
+                    <option value="">- не выбрано -</option>
 
-            @foreach($roles as $role)
-                <option value="{{ $role }}" {{ request('role') != $role ?: 'selected' }}>{{ $role }}</option>
-            @endforeach
+                    @foreach($roles as $role)
+                        <option value="{{ $role }}" {{ request('role') != $role ?: 'selected' }}>{{ $role }}</option>
+                    @endforeach
 
-        </select>
-    </form>
+                </select>
+            </form>
+        </div>
+    </div>
 @endsection
 @section('content')
 

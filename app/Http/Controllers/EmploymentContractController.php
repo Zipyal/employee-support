@@ -20,20 +20,6 @@ class EmploymentContractController extends Controller
         'rate' => 'required|integer|between:1,24',
     ];
 
-    public function index(Request $request)
-    {
-        return view('employmentContract.index', [
-            'employmentContracts' => EmploymentContract::query()->get(),
-        ]);
-    }
-
-    public function show(string $id)
-    {
-        return view('employmentContract.view', [
-            'employmentContract' => EmploymentContract::query()->findOrFail($id)
-        ]);
-    }
-
     public function add($employeeId)
     {
         $employee = Employee::query()->findOrFail($employeeId);

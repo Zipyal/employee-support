@@ -11,8 +11,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * Class TestAnswerVariant
  * @package App\Models
  *
+ * @property string $uuid
  * @property string $text
  * @property bool $is_correct
+ * @property string $question_uuid
  *
  * @property TestQuestion $question
  */

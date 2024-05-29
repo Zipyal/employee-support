@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -24,14 +25,15 @@ class BriefingFactory extends Factory
             $textParagraphs[] = $faker->realText(rand(200, 800), rand(3, 5));
         }
 
-        $randomUser = User::query()->where('role_id', '=', User::ROLE_MENTOR)->inRandomOrder()->first();
-
+        $randomUser = User::query()->withoutRole([Role::ROLE_INTERN, Role::ROLE_EMPLOYEE])->inRandomOrder()->first();
+        $randomPublished = array_rand(array_flip(range(0, 10))) < 3;
         $createdAt = $faker->dateTimeBetween('-1 year');
 
         return [
             'subject' => $faker->realText(50),
             'text' => implode(PHP_EOL . PHP_EOL, $textParagraphs),
-            'author_id' => $randomUser->id ?? null,
+            'author_uuid' => $randomUser->uuid ?? null,
+            'published' => $randomPublished,
             'created_at' => $createdAt,
             'updated_at' => $faker->dateTimeBetween($createdAt->format('Y-m-d H:i:s')),
         ];
