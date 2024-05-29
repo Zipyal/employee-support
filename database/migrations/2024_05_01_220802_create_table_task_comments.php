@@ -15,11 +15,10 @@ return new class extends Migration {
     {
         Schema::create(self::TABLE_NAME, function (Blueprint $table) {
             $table->uuid()->primary();
-            $table->text('text')->comment('Комментарий задачи');
+            $table->text('text')->comment('Текст комментария');
+            $table->foreignId('task_id')->comment('Ссылка на задачу')->references('id')->on('tasks')->onDelete('cascade');
+            $table->foreignUuid('author_uuid')->nullable()->comment('Ссылка на пользователя (автор)')->references('uuid')->on('users')->onDelete('set null');
             $table->timestamps();
-
-            $table->foreignUuid('task_uuid')->references('uuid')->on('tasks')->onDelete('cascade');
-            $table->foreignUuid('employee_uuid')->nullable()->references('uuid')->on('employees')->onDelete('set null');
         });
     }
 
